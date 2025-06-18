@@ -1,0 +1,98 @@
+{
+  "shared_main_nav": {
+    "about_link": "O hre",
+    "game_link": "Hraj"
+  },
+
+  "shared_about_nav": {
+    "rules_link": "Pravidlá",
+    "images_link": "Obrázky"
+  },
+
+  "home_page": {
+    "h1": "Pexeso"
+  },
+
+  "about_page": {
+    "h2": "O hre pexeso"
+  },
+
+  "images_page": {
+    "h2": "Hracie obrázky",
+    "loading": "Načítavajú sa obrázky"
+  },
+
+  "rules_page": {
+    "h2": "Pravidlá",
+    "h4": {
+      "principle": "Princíp",
+      "level": "Nastavenie levelu obtiažnosti"
+    },
+    "content": {
+      "principle": "Hľadať zhodný pár obrázkov pod obrázkom jokera.",
+      "level": {
+        "name": {
+          "easy": "Ľahký",
+          "medium": "Stredný",
+          "hard": "Ťažký"
+        },
+        "description": {
+          "easy": "Obrázky sa nemiešajú, ale uhádnuté sa vymažú a zvyšné sa posúvajú k sebe.",
+          "medium": "Usporiadanie obrázkov sa mieša po každej neuhádnutej dvojici.",
+          "hard": "Usporiadanie obrázkov sa mieša takmer každú sekundu."
+        }
+      }
+    }
+  },
+
+  "single_img_page": {
+    "h2": {
+      "drop": "kvapka",
+      "vibration": "vibrácia",
+      "sea": "more",
+      "lightning": "blesk",
+      "wood": "drevo",
+      "sun": "slnko",
+      "space": "vesmír",
+      "wind": "vietor",
+      "not_exist": "neexistujúci obrázok"
+    },
+    "btn": {
+      "btn_back": "Späť na stránku obrázkov",
+      "btn_error": "Klikni sem a poď na stránku obrázkov"
+    },
+    "h3_error": "Error, tento obrázok neexistuje"
+  },
+
+  "settings_page": {
+    "h5": "Nastavte parametre hry",
+    "legend": {
+      "level": "Vyberte úroveň obtiažnosti:",
+      "img_count": "Vyberte počet obrázkov:"
+    },
+    "level": {
+      "easy": "Ľahký",
+      "medium": "Stredný",
+      "hard": "Ťažký"
+    },
+    "error_alert": {
+      "level": "Nastav level obtiažnosti!",
+      "img_count": "Nastav počet obrázkov, s ktorými chceš hrať!"
+    },
+    "btn_play": "Hraj"
+  },
+
+  "game_page": {
+    "h5": "Pre začatie hry stlačte štart",
+    "btn_start": "Štart",
+    "link_before_start": "Späť na nastavenie hry",
+    "link_after_start": "Nová hra",
+    "link_end_game": "Hraj znova",
+    "congratulations": "Gratulácia, vyhrali ste za "
+  },
+
+  "not_found_page": {
+    "h3": "Error, táto stránka neexistuje",
+    "btn_back": "Klikni sem a poď na hlavnú stránku"
+  }
+}
