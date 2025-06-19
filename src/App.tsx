@@ -121,10 +121,7 @@ const App = () => {
                   <Route path="rules" element={<Rules />} />
 
                   <Route path="images" element={<Images />} />
-                  <Route
-                    path="images/:name"
-                    element={<SingleImg />}
-                  />
+                  <Route path="images/:name" element={<SingleImg />} />
                 </Route>
               </Route>
             </Route>
