@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Outlet, useParams, Navigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 // import UrlValidationInit from "../UrlValidationInit";
@@ -8,6 +9,12 @@ const SharedLangLayout = () => {
 
   const supportedLangs = ["en", "sk", "de"];
   const isValidLang = supportedLangs.includes(lang || "");
+
+   useEffect(() => {
+    if (lang && i18n.language !== lang && isValidLang) {
+      i18n.changeLanguage(lang);
+    }
+  }, [lang, i18n, isValidLang]);
 
   if (!isValidLang) {
     return <Navigate to={`/${i18n.language}`} replace />;
@@ -21,13 +28,10 @@ const SharedLangLayout = () => {
 //   if (currentPathLang !== currentLang) {
 //     // má prefix, ale nesedí s i18n.language
 //     const restOfPath = pathParts.slice(1).join("/");
-//     <Navigate to={`/${currentLang}/${restOfPath}`} replace />
+//     <Navigate to={`/${currentLang}/${restOfPath}`}  />
 //     return;
 //   }
-  // Nastav jazyk
-//   if (i18n.language !== lang) {
-//     i18n.changeLanguage(lang);
-//   }
+
 
   return (
     <>

@@ -11,7 +11,7 @@ i18n.use(initReactI18next).init({
     sk: { translation: sk },
     de: { translation: de },
   },
-  lng: 'sk', // default language
+  // lng: 'sk', // default language
   fallbackLng: 'en',
   interpolation: {
     escapeValue: false, // react doing this automatically

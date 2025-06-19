@@ -124,8 +124,8 @@ const App = () => {
                   <Route path="images/:name" element={<SingleImg />} />
                 </Route>
               </Route>
+              <Route path="*" element={<ErrorPage />} />
             </Route>
-            <Route path="*" element={<ErrorPage />} />
           </Routes>
         </BrowserRouter>
       </Box>

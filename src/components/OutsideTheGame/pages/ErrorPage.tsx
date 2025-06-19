@@ -5,11 +5,21 @@ import { pulsatingButtonStyles } from "@pexeso/components/StylingComp/SharedStyl
 // import LanguageInit from "../UrlValidationInit";
 
 const ErrorPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { lang } = useParams();
+
+  // const supportedLangs = ["en", "sk", "de"];
+  // const isValidLang = supportedLangs.includes(lang || "");
+
+  // if (isValidLang) {
+  //   i18n.changeLanguage(lang);
+  // }
+
+  console.log("toto je z url", lang);
+  console.log("toto je nastavený", i18n.language);
+
   return (
     <Box>
-      {/* <LanguageInit /> */}
 
       <Typography variant="h3" component="h3">
         {" "}
