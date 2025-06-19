@@ -15,10 +15,6 @@ body {
   cursor: pointer;
 }
 
-/* .column_content .row .mask img {
-  opacity: 0%;
-} */
-
 .column_content .row .div_on_click {
   margin: 2%;
   width: 107px;

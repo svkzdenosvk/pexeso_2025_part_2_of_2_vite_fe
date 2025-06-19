@@ -1,4 +1,4 @@
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link,useParams } from "react-router-dom";
 import { Box, Button } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { sharedNavLinkStyles } from "@pexeso/components/StylingComp/SharedStyles";
@@ -59,6 +59,7 @@ const mainContentAboutStyles = {
 
 const SharedAboutLayout = () => {
   const { t } = useTranslation();
+   const { lang } = useParams();
 
   return (
     <Box sx={sharedAboutWrapperStyles}>
@@ -66,7 +67,7 @@ const SharedAboutLayout = () => {
         <Box component="nav" sx={navStyles}>
           <Button
             component={Link}
-            to="/about-game/rules"
+            to={`/${lang}/about-game/rules`}
             variant="contained"
             sx={[sharedNavLinkStyles, navLinkStyles]}
           >
@@ -74,7 +75,7 @@ const SharedAboutLayout = () => {
           </Button>
           <Button
             component={Link}
-            to="/about-game/images"
+            to={`/${lang}/about-game/images`}
             variant="contained"
             sx={[sharedNavLinkStyles, navLinkStyles]}
           >

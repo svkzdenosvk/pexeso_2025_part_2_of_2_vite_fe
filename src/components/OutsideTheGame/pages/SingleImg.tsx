@@ -2,12 +2,10 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Typography, Box, Button } from "@mui/material";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import type { RootState } from "@pexeso/lib/redux/store/store";
 import { my_Type_Guard_function } from "@pexeso/_inc/_inc_functions";
-// import { MyMUIButton } from "@pexeso/components/SharedMUIElements/MyMUIButton";
-// import { MyMUIImg } from "@pexeso/components/SharedMUIElements/MyMUIImg";
 import { pulsatingButtonStyles } from "@pexeso/components/StylingComp/SharedStyles";
 
 // ---------- sx styles
@@ -40,6 +38,7 @@ const imgStyles = {
 
 const SingleImg = () => {
   const { t } = useTranslation();
+  const { lang } = useParams();
 
   const params = useParams();
   const name = typeof params?.name === "string" ? params.name : undefined;
@@ -49,17 +48,17 @@ const SingleImg = () => {
   const [errorImgName, setErrorImgName] = useState(false);
   const [imgNameH3, setNameH3] = useState("");
 
-   //error if img doesn´t exist
+  //error if img doesn´t exist
   useEffect(() => {
-    if (!name || typeof name !== 'string') {
+    if (!name || typeof name !== "string") {
       setErrorImgName(true);
-      setNameH3(t('single_img_page.h2.not_exist'));
+      setNameH3(t("single_img_page.h2.not_exist"));
       return;
     }
 
     if (!my_Type_Guard_function(name, imgNames)) {
       setErrorImgName(true);
-      setNameH3(t('single_img_page.h2.not_exist'));
+      setNameH3(t("single_img_page.h2.not_exist"));
     } else {
       // if not error set H3 from param (name of picture)
       setErrorImgName(false);
@@ -70,7 +69,7 @@ const SingleImg = () => {
   }, [name, imgNames, t]);
 
   return (
-      <Box sx={singleImgContentStyles}>
+    <Box sx={singleImgContentStyles}>
       {/* //the first letter is capitalized */}
       <Typography variant="h3" component="h3">
         {imgNameH3.charAt(0).toUpperCase() + imgNameH3.slice(1)}
@@ -80,21 +79,20 @@ const SingleImg = () => {
         {errorImgName ? (
           <>
             <Typography variant="h3" component="h3">
-              {t('single_img_page.h3_error')}
+              {t("single_img_page.h3_error")}
             </Typography>
             <Button
               component={Link}
-              to="/about-game/images"
+              to={`/${lang}/about-game/images`}
               variant="contained"
               sx={pulsatingButtonStyles}
             >
-              {t('single_img_page.btn.btn_error')}
+              {t("single_img_page.btn.btn_error")}
             </Button>
           </>
         ) : (
           //  if not error
           <>
-            {/* <MyMUIImg sx={imgStyles} src={`/pictures/pexeso/${imgName}.jpg`} /> */}
             <Box
               component="img"
               src={`/pictures/pexeso/${name}.jpg`}
@@ -103,14 +101,13 @@ const SingleImg = () => {
             />
             <Button
               component={Link}
-              to={"/about-game/images"}
+              to={`/${lang}/about-game/images`}
               variant="contained"
               sx={pulsatingButtonStyles}
             >
-               {t('single_img_page.btn.btn_back')}
+              {t("single_img_page.btn.btn_back")}
             </Button>
-          
-           </>
+          </>
         )}
       </Box>
     </Box>

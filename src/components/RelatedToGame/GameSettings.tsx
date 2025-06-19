@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation,useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import {
   Box,
@@ -28,7 +28,6 @@ import {
   my_Type_Guard_function,
   my_Type_Guard_function_number,
 } from "@pexeso/_inc/_inc_functions";
-// import { MyMUIButton } from "@pexeso/components/SharedMUIElements/MyMUIButton";
 import { pulsatingButtonStyles } from "@pexeso/components/StylingComp/SharedStyles";
 
 // ---------- sx styles
@@ -61,7 +60,7 @@ const alertStyles = {
 
 const GameSettings = () => {
   const { t } = useTranslation();
-  // const { t, i18n } = useTranslation();
+  const { lang } = useParams();
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -110,8 +109,7 @@ const GameSettings = () => {
     );
 
     formRef.current?.reset();
-    navigate("/game");
-    // navigate( `/${i18n.language}game `);
+    navigate( `/${lang}/game `);
   };
 
   return (

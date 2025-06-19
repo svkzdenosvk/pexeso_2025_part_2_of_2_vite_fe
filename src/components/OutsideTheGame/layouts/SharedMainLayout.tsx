@@ -1,8 +1,9 @@
-import { Outlet,Link} from "react-router-dom";
+import { Outlet,Link, useParams} from "react-router-dom";
 import { Box, Button } from "@mui/material";
 import { useTranslation } from 'react-i18next';
 import { sharedNavLinkStyles } from "@pexeso/components/StylingComp/SharedStyles";
 import  TranslateButtons from '../TranslateButtons'
+// import LanguageInit from "../LanguageInit";
 
 // ---------- sx styles
 
@@ -59,15 +60,17 @@ const mainContentStyles = {
 
 const SharedLayout = () => {
   const { t } = useTranslation();
-
+const { lang } = useParams();
   return (
     <Box sx={sharedWrapperStyles}>
+            {/* <LanguageInit /> */}
+      
       <TranslateButtons/>
       <Box sx={sharedHeaderNavigation}>
         <Box sx={navStyles}>
              <Button
             component={Link}
-            to="/about-game"
+            to={`/${lang}/about-game`}
             variant="contained"
             sx={[sharedNavLinkStyles, navLinkStyles]}
           >
@@ -76,7 +79,7 @@ const SharedLayout = () => {
          
           <Button
             component={Link}
-            to="/settings"
+            to={`/${lang}/settings`}
             variant="contained"
             sx={[sharedNavLinkStyles, navLinkStyles]}
           >

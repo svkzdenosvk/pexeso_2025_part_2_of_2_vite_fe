@@ -8,6 +8,7 @@ export const pulseShadow = keyframes`
 `;
 
 export const pulsatingButtonStyles = {
+  mx: "auto",
   textAlign: "center",
   textDecoration: "none",
   width: "50%",
@@ -17,7 +18,7 @@ export const pulsatingButtonStyles = {
   margin: "10px auto",
   fontWeight: "bold",
   padding: "10px 25px",
-  display: "inline",
+  display: "block",
   borderRadius: "25px",
   animation: `${pulseShadow} 1.5s infinite ease-in-out`,
   "&:hover": {
@@ -59,8 +60,7 @@ export const sharedThemeStyles = {
     h1: {
       fontFamily: '"Times New Roman", serif',
       textAlign: "center" as const,
-      fontSize: 'calc(2rem + 5vw)',
-   
+      fontSize: "calc(2rem + 5vw)",
     },
     h2: {
       fontFamily: '"Times New Roman", serif',

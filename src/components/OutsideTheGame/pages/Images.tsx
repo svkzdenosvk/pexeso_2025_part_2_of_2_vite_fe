@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import type { RootState } from "@pexeso/lib/redux/store/store";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Typography, Box, Button } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
@@ -12,7 +12,6 @@ import { useTranslation } from "react-i18next";
 // import sun from '@assets/pictures/sun.jpg';
 // import space from '@assets/pictures/space.jpg';
 // import sea from '@assets/pictures/sea.jpg';
-
 
 // ---------- sx styles
 
@@ -64,6 +63,7 @@ const imgStyles = {
 
 const Images = () => {
   const { t } = useTranslation();
+  const { lang } = useParams();
 
   const { isLoading, imgNames } = useSelector((state: RootState) => state.game); //-------------with destructuring
 
@@ -85,7 +85,7 @@ const Images = () => {
               {/* link from img */}
               <Button
                 component={Link}
-                to={`/about-game/images/${oneImgName}`}
+                to={`/${lang}/about-game/images/${oneImgName}`}
                 variant="contained"
                 sx={btnLinkStyles}
               >

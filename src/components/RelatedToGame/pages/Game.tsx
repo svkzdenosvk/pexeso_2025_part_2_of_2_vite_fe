@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import { Typography, Box, Button } from "@mui/material";
 import type { Theme } from "@mui/material/styles";
 import {
@@ -15,6 +15,7 @@ import type { RootState } from "@pexeso/lib/redux/store/store";
 import type { My_Type_DivImg } from "@pexeso/_inc/my_types";
 import { GameDivPictures } from "./GameDivPictures";
 import { TimeAndStart } from "../TimeAndStart";
+import LanguageInit from "@pexeso/components/OutsideTheGame/UrlValidationInit";
 
 // ---------- sx styles
 
@@ -68,6 +69,7 @@ const columnContentStyles = {
 
 export const Game = () => {
   const { t } = useTranslation();
+  const { lang } = useParams();
 
   // ---------------------------redux
   const dispatch = useDispatch();
@@ -99,12 +101,11 @@ export const Game = () => {
       !my_Type_Guard_function(level, ["easy", "medium", "hard"]) ||
       !my_Type_Guard_function_number(selectedImgCount, [5, 6, 7, 8])
     ) {
-      navigate("/settings"); // --------------------------------------------------------redirect if settings are not exist or not valid
-      // navigate(`/${i18n.language}/settings `); // --------------------------------------------------------redirect if settings are not exist or not valid
+      navigate(`/${lang}/settings `);
 
       return;
     } else {
-    //create array of objects (div > img) to play from img names and img count 
+      //create array of objects (div > img) to play from img names and img count
       const createFinalArrayFroGame = async () => {
         try {
           const imgDivs: My_Type_DivImg[] =
@@ -121,29 +122,31 @@ export const Game = () => {
 
       createFinalArrayFroGame(); //-------------------------------------------------to call async f.
     }
-  }, [level, selectedImgCount, navigate, dispatch, imgNames]);
+  }, [level, selectedImgCount, navigate, dispatch, imgNames, lang]);
 
   return (
     <>
+      <LanguageInit />
+
       <Box className="welcome" sx={welcomeStyles}>
         {/* if end -> congratulation */}
         {isEnd && (
-          <Typography variant="h1" sx={{ marginBottom: '70px' }}>
-            {t('game_page.congratulations')} {_myFormatSeconds(seconds)}
+          <Typography variant="h1" sx={{ marginBottom: "70px" }}>
+            {t("game_page.congratulations")} {_myFormatSeconds(seconds)}
           </Typography>
         )}
-          {/* button to settings form */}
+        {/* button to settings form */}
         <Button
           component={Link}
-          to="/settings"
+          to={`/${lang}/settings`}
           variant="contained"
           sx={gameLinkButtonStyles}
         >
           {t(linkName)}
         </Button>
-       
+
         <Typography variant="h5" component="h5" sx={colorTextThemeStyles}>
-          {t('game_page.h5')}
+          {t("game_page.h5")}
         </Typography>
 
         <TimeAndStart />

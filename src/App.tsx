@@ -1,8 +1,10 @@
 import { useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { Box } from "@mui/material";
+
+import { useTranslation } from "react-i18next";
 import { fetchOnlyImgNames, preloadImages } from "@pexeso/_inc/data";
 import type { My_Type_Theme } from "@pexeso/_inc/my_types";
 import type { RootState } from "@pexeso/lib/redux/store/store";
@@ -10,7 +12,6 @@ import {
   set_img_names,
   set_loading,
 } from "@pexeso/lib/redux/store/reducers/gameSlice";
-// import { GlobalStyle } from "@pexeso/components/StylingComp/GlobalStyle";
 import { defaultTheme } from "@pexeso/components/StylingComp/themes/defaultTheme";
 import { mediumTheme } from "@pexeso/components/StylingComp/themes/mediumTheme";
 import { hardTheme } from "@pexeso/components/StylingComp/themes/hardTheme";
@@ -20,13 +21,15 @@ import Home from "@pexeso/components/OutsideTheGame/pages/Home";
 import GameSettings from "@pexeso/components/RelatedToGame/GameSettings";
 import Rules from "@pexeso/components/OutsideTheGame/pages/Rules";
 import SharedAboutLayout from "@pexeso/components/OutsideTheGame/layouts/SharedAboutLayout";
+import SharedLangLayout from "@pexeso/components/OutsideTheGame/layouts/SharedLangLayout";
 import AboutGame from "@pexeso/components/OutsideTheGame/pages/AboutGame";
 import Images from "@pexeso/components/OutsideTheGame/pages/Images";
 import SingleImg from "@pexeso/components/OutsideTheGame/pages/SingleImg";
-import ErrorPage from "@pexeso/components/ErrorPage";
+import ErrorPage from "@pexeso/components/OutsideTheGame/pages/ErrorPage";
 
 const App = () => {
   //------------------------------------redux-----------------------------------------
+  const { i18n } = useTranslation();
 
   const {
     imgNames,
@@ -99,24 +102,32 @@ const App = () => {
       <Box sx={dynamicWrapperStyles}>
         <BrowserRouter>
           <Routes>
-            <Route path="/game" element={<Game />} />
+            <Route
+              path="/"
+              element={<Navigate to={`/${i18n.language}`} replace />}
+            />
 
-            <Route path="/" element={<SharedLayout />}>
-              <Route index element={<Home />} />
-              <Route path="/settings" element={<GameSettings />} />
+            <Route path="/:lang" element={<SharedLangLayout />}>
+              <Route path="game" element={<Game />} />
 
-              <Route path="/about-game" element={<SharedAboutLayout />}>
-                <Route index element={<AboutGame />} />
-                <Route path="/about-game/rules" element={<Rules />} />
+              {/* <Route index element={<Navigate to="/" replace />} />  */}
 
-                <Route path="/about-game/images" element={<Images />} />
-                <Route
-                  path="/about-game/images/:name"
-                  element={<SingleImg />}
-                />
+              <Route element={<SharedLayout />}>
+                <Route index element={<Home />} />
+                <Route path="settings" element={<GameSettings />} />
+
+                <Route path="about-game" element={<SharedAboutLayout />}>
+                  <Route index element={<AboutGame />} />
+                  <Route path="rules" element={<Rules />} />
+
+                  <Route path="images" element={<Images />} />
+                  <Route
+                    path="images/:name"
+                    element={<SingleImg />}
+                  />
+                </Route>
               </Route>
             </Route>
-
             <Route path="*" element={<ErrorPage />} />
           </Routes>
         </BrowserRouter>
