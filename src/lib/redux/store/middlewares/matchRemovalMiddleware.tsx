@@ -1,11 +1,11 @@
-import { Middleware } from "@reduxjs/toolkit";
+import type { Middleware } from "@reduxjs/toolkit";
 import {
   remove_after_match,
   match,
   end_game,
 } from "@pexeso/lib/redux/store/reducers/gameSlice";
 
-export const matchRemovalMiddleware: Middleware<{}> =
+export const matchRemovalMiddleware: Middleware<unknown> =
   (storeAPI) => (next) => (action) => {
     if (
       typeof action === "object" &&
