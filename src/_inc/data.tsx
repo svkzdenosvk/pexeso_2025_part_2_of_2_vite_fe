@@ -5,6 +5,7 @@ import type {
   My_Type_Img_Name,
   My_Type_ImgCount,
   My_Type_DivImg,
+  My_Type_Image,
 } from "./my_types";
 
 //random string generate
@@ -52,18 +53,16 @@ export async function createDivsArrayFromImgNamesAndCountImg(
   //to shuffle before every game
   const shuffledImgNamesPairsArray = _shuffleArray(doubleImgs);
 
-  //creation of 2-dimensional array: - out of component to make id´s stable
-  // ['123e4567-e89b-12d3-a456-426614174000', 'blesk'],
-  // ['123e4567-e89b-12d3-a456-426614174001', 'kvapka'],..
-  const imgsWithKeys = shuffledImgNamesPairsArray.map((pictureName) => [
-    uuidv4(),
-    pictureName,
-  ]);
+  //array of pairs names of pictures with ids
+  const imgsWithKeys:My_Type_Image[] = shuffledImgNamesPairsArray.map((pictureName) => ({
+    id:uuidv4(),
+    name: pictureName,
+  }));
 
   //-array of objects: img {name,id, classes} -> div>img
-  const divItems: My_Type_DivImg[] = imgsWithKeys.map(([id, pictureName]) => ({
+  const divItems: My_Type_DivImg[] = imgsWithKeys.map(({id, name }) => ({
     id: id,
-    name: pictureName,
+    name: name,
     classNames: ["mask", "div_on_click"],
   }));
 
