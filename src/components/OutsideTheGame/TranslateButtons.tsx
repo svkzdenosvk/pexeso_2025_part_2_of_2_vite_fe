@@ -1,6 +1,7 @@
- import { /*Navigate,*/ useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button, ButtonGroup, Box } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { LANGUAGE_CONFIG } from "@pexeso/lib/i18n/i18n_MySettings";
 
 const TranslateButtons = () => {
   const { i18n } = useTranslation();
@@ -8,17 +9,19 @@ const TranslateButtons = () => {
 
   const currentLang = i18n.language;
 
+  //onClick function to change language, save l. to localStorage and rewrite lang prefix 
   const changeLanguage = (lng: string) => {
-    i18n.changeLanguage(lng);
-    // const newLang = i18n.language;
-    const pathParts = location.pathname.split("/").filter(Boolean); // napr. ["de", "images"]
-    const restOfPath = pathParts.slice(1).join("/");
-    console.log(`/${lng}/${restOfPath}`);
-    //  <Navigate to={`/${lng}/${restOfPath}`} />;
-     navigate(`/${lng}/${restOfPath}`)
-  };
 
-  const languages = ["en", "sk", "de"];
+    i18n.changeLanguage(lng);
+    const pathParts = location.pathname.split("/").filter(Boolean); // for ex. ["de", "images"]
+    const restOfPath = pathParts.slice(1).join("/");
+
+    //save in localStorage
+    localStorage.setItem("lang", lng!);
+
+    //redirect with new lang prefix
+    navigate(`/${lng}/${restOfPath}`);
+  };
 
   return (
     <Box
@@ -38,7 +41,7 @@ const TranslateButtons = () => {
           overflow: "hidden",
         }}
       >
-        {languages.map((lng) => (
+        {LANGUAGE_CONFIG.languages.map((lng) => (
           <Button
             key={lng}
             onClick={() => changeLanguage(lng)}

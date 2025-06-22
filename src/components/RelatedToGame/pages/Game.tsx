@@ -15,7 +15,6 @@ import type { RootState } from "@pexeso/lib/redux/store/store";
 import type { My_Type_DivImg } from "@pexeso/_inc/my_types";
 import { GameDivPictures } from "./GameDivPictures";
 import { TimeAndStart } from "../TimeAndStart";
-import LanguageInit from "@pexeso/components/OutsideTheGame/UrlValidationInit";
 
 // ---------- sx styles
 
@@ -126,8 +125,6 @@ export const Game = () => {
 
   return (
     <>
-      <LanguageInit />
-
       <Box className="welcome" sx={welcomeStyles}>
         {/* if end -> congratulation */}
         {isEnd && (

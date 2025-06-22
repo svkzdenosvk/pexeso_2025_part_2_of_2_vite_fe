@@ -3,8 +3,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { Box } from "@mui/material";
-
 import { useTranslation } from "react-i18next";
+import {LANGUAGE_CONFIG} from '@pexeso/lib/i18n/i18n_MySettings';
 import { fetchOnlyImgNames, preloadImages } from "@pexeso/_inc/data";
 import type { My_Type_Theme } from "@pexeso/_inc/my_types";
 import type { RootState } from "@pexeso/lib/redux/store/store";
@@ -27,9 +27,11 @@ import Images from "@pexeso/components/OutsideTheGame/pages/Images";
 import SingleImg from "@pexeso/components/OutsideTheGame/pages/SingleImg";
 import ErrorPage from "@pexeso/components/OutsideTheGame/pages/ErrorPage";
 
+// ---------- component
 const App = () => {
-  //------------------------------------redux-----------------------------------------
   const { i18n } = useTranslation();
+  //------------------------------------redux-----------------------------------------
+  const dispatch = useDispatch();
 
   const {
     imgNames,
@@ -49,8 +51,8 @@ const App = () => {
   const currentTheme =
     importedThemes[localVariableTheme as My_Type_Theme] ?? defaultTheme;
 
-  const dispatch = useDispatch();
   //------------------------------------------------------------------------------------------------------------
+  
   //dynamic styles
 
   const dynamicWrapperStyles = {
@@ -65,7 +67,9 @@ const App = () => {
   useEffect(() => {
     const fetchImgNamesFunc = async () => {
       try {
-        const fetchedImgNames = await fetchOnlyImgNames(); // ----------------------loading img names from firebase
+
+        //fetching img names from firebase
+        const fetchedImgNames = await fetchOnlyImgNames(); 
 
         dispatch(set_img_names(fetchedImgNames));
       } catch (error) {
@@ -73,28 +77,35 @@ const App = () => {
       }
     };
 
-    fetchImgNamesFunc(); //--------------------------------------------------------to call async f.
+    //to call async f.
+    fetchImgNamesFunc(); 
   }, [dispatch]);
+
 
   useEffect(() => {
     if (!isLoading) return;
 
-    preloadImages(
-      imgNames
-    ) /*---------------------------------------------------------------------------function to preload imgd */
+    //function to preload imgs
+    preloadImages(imgNames)
       .then(() => {
         dispatch(
+          //set loading to false after imgs were loaded
           set_loading()
-        ); /*----------------------------------------------------------------------set loading to false after imgs were loaded*/
+        );
       })
       .catch((err) => {
-        // setError(err.message);    // save error message
+        // setError(err.message);    // save error message / or show message ..hm 
         console.log("Not all images were loaded", err);
         // setLoadingImg(false);        //-----------------------------------------set loading to false
-        window.location.reload(); //-----------------------------------------------reload page when imgs weren´t loaded correctly
+        //reload page when imgs weren´t loaded correctly
+        window.location.reload(); 
       });
-  }, [isLoading, imgNames, dispatch]); //-------------------------------------------if problems -> try only imgNames or nothing
+  }, [isLoading, imgNames, dispatch]); 
 
+  //redirect with right lang prefix
+  const storedLocalStorageLang = localStorage.getItem("lang");
+  const setlang = storedLocalStorageLang || i18n.language || LANGUAGE_CONFIG.fallbackLang;
+  
   return (
     <ThemeProvider theme={currentTheme}>
       <CssBaseline />
@@ -102,15 +113,10 @@ const App = () => {
       <Box sx={dynamicWrapperStyles}>
         <BrowserRouter>
           <Routes>
-            <Route
-              path="/"
-              element={<Navigate to={`/${i18n.language}`} replace />}
-            />
+            <Route path="/" element={<Navigate to={`/${setlang}`} replace />} />
 
             <Route path="/:lang" element={<SharedLangLayout />}>
               <Route path="game" element={<Game />} />
-
-              {/* <Route index element={<Navigate to="/" replace />} />  */}
 
               <Route element={<SharedLayout />}>
                 <Route index element={<Home />} />
@@ -126,6 +132,7 @@ const App = () => {
               </Route>
               <Route path="*" element={<ErrorPage />} />
             </Route>
+            <Route path="*" element={<ErrorPage />} />
           </Routes>
         </BrowserRouter>
       </Box>

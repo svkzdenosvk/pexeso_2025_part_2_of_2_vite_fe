@@ -1,5 +1,4 @@
 export type My_Type_Level = "easy" | "medium" | "hard";
-// export type My_Type_Level_Svk = "Ľahký" | "Stredný" | "Ťažký";
 
 export type My_Type_Img_Name =
   | "lightning"
@@ -81,3 +80,5 @@ export type My_Type_Redux_Root_State = {
   };
   time: { seconds: number };
 };
+/*----------------------------------------i18n----------------------------------------- */
+export type My_Type_Lang = "en" | "sk" | "de";

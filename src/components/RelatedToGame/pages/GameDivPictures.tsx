@@ -11,7 +11,6 @@ import {
   un_match,
   hardest_level_shuffle,
 } from "@pexeso/lib/redux/store/reducers/gameSlice";
-// import { MyMUIImg } from "@pexeso/components/SharedMUIElements/MyMUIImg";
 
 // ---------- sx styles
 
@@ -95,10 +94,11 @@ export const GameDivPictures = () => {
       }
 
       document.body.style.pointerEvents =
-        "auto"; /*---------------------------------------------------------------give back functionality to pointer*/
+        //give back functionality to pointer
+        "auto"; 
     }, 200);
 
-    //-------------------------in the hardest level shuffeling every 400 ms
+    //in the hardest level shuffeling every 400 ms
     if (level === "hard") {
       const intervalShuffleHardest = setInterval(() => {
         dispatch(hardest_level_shuffle());

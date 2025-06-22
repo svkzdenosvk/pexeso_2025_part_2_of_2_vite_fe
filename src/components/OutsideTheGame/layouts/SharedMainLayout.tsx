@@ -3,7 +3,6 @@ import { Box, Button } from "@mui/material";
 import { useTranslation } from 'react-i18next';
 import { sharedNavLinkStyles } from "@pexeso/components/StylingComp/SharedStyles";
 import  TranslateButtons from '../TranslateButtons'
-// import LanguageInit from "../LanguageInit";
 
 // ---------- sx styles
 

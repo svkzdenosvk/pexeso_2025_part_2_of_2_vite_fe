@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import gameReducer from "./reducers/gameSlice";
 import secondsReducer from "./reducers/secondsSlice";
 
- import { matchRemovalMiddleware } from "@pexeso/middlewares/matchRemovalMiddleware";  
+ import { matchRemovalMiddleware } from "@pexeso/lib/redux/store/middlewares/matchRemovalMiddleware";  
 
 export const store = configureStore({
   reducer: {
