@@ -79,7 +79,7 @@ const Images = () => {
             {t("images_page.loading")}
           </Typography>
         ) : (
-          //--------------------------------------------------------------------------------after loading show images
+          // after loading show images
           imgNames.map((oneImgName) => (
             <Box key={oneImgName}>
               {/* link from img */}

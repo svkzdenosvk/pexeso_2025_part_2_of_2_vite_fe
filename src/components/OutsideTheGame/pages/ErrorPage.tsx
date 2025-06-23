@@ -4,6 +4,8 @@ import { useTranslation } from "react-i18next";
 import { pulsatingButtonStyles } from "@pexeso/components/StylingComp/SharedStyles";
 import { my_Type_Guard_function_isValidLang } from "@pexeso/_inc/_inc_functions";
 
+// ---------- component
+
 const ErrorPage = () => {
   const { t, i18n } = useTranslation();
   const { lang } = useParams();

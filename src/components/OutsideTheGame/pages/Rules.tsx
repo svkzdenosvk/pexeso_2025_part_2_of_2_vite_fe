@@ -114,14 +114,11 @@ const Rules = () => {
   return (
     <Box sx={rulesContentStyles}>
       <Typography variant="h2" component="h2">
-        {" "}
-        {/*originally h1 */}
         {t("rules_page.h2")}
       </Typography>
       <Box sx={rulesMainContentStyles}>
+        {/* principle section */}
         <Typography variant="h4" component="h4">
-          {" "}
-          {/*originally h2 */}
           {t("rules_page.h4.principle")}
         </Typography>
         <Box sx={rulesPrincipleSectionStyles}>
@@ -131,11 +128,13 @@ const Rules = () => {
           {/*  joker img */}
           <Box component="img" src={joker} alt="Pexeso img" sx={imgStyles} />
         </Box>
+
+        {/* level section */}
         <Typography variant="h4" component="h4">
           {" "}
-          {/*originally h2 */}
           {t("rules_page.h4.level")}
         </Typography>
+
         <Box sx={rulesLevelSectionStyles}>
           {/* automatization */}
           <List sx={ulListStyles}>

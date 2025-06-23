@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { Box } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import {LANGUAGE_CONFIG} from '@pexeso/lib/i18n/i18n_MySettings';
+import { LANGUAGE_CONFIG } from "@pexeso/lib/i18n/i18n_MySettings";
 import { fetchOnlyImgNames, preloadImages } from "@pexeso/_inc/data";
 import type { My_Type_Theme } from "@pexeso/_inc/my_types";
 import type { RootState } from "@pexeso/lib/redux/store/store";
@@ -52,7 +52,7 @@ const App = () => {
     importedThemes[localVariableTheme as My_Type_Theme] ?? defaultTheme;
 
   //------------------------------------------------------------------------------------------------------------
-  
+
   //dynamic styles
 
   const dynamicWrapperStyles = {
@@ -67,9 +67,8 @@ const App = () => {
   useEffect(() => {
     const fetchImgNamesFunc = async () => {
       try {
-
         //fetching img names from firebase
-        const fetchedImgNames = await fetchOnlyImgNames(); 
+        const fetchedImgNames = await fetchOnlyImgNames();
 
         dispatch(set_img_names(fetchedImgNames));
       } catch (error) {
@@ -78,9 +77,8 @@ const App = () => {
     };
 
     //to call async f.
-    fetchImgNamesFunc(); 
+    fetchImgNamesFunc();
   }, [dispatch]);
-
 
   useEffect(() => {
     if (!isLoading) return;
@@ -94,18 +92,19 @@ const App = () => {
         );
       })
       .catch((err) => {
-        // setError(err.message);    // save error message / or show message ..hm 
+        // setError(err.message);    // save error message / or show message ..hm
         console.log("Not all images were loaded", err);
         // setLoadingImg(false);        //-----------------------------------------set loading to false
         //reload page when imgs weren´t loaded correctly
-        window.location.reload(); 
+        window.location.reload();
       });
-  }, [isLoading, imgNames, dispatch]); 
+  }, [isLoading, imgNames, dispatch]);
 
   //redirect with right lang prefix
   const storedLocalStorageLang = localStorage.getItem("lang");
-  const setlang = storedLocalStorageLang || i18n.language || LANGUAGE_CONFIG.fallbackLang;
-  
+  const setlang =
+    storedLocalStorageLang || i18n.language || LANGUAGE_CONFIG.fallbackLang;
+ 
   return (
     <ThemeProvider theme={currentTheme}>
       <CssBaseline />
