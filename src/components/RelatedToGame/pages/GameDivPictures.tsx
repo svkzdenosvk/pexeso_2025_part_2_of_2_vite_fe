@@ -93,9 +93,8 @@ export const GameDivPictures = () => {
         }
       }
 
-      document.body.style.pointerEvents =
-        //give back functionality to pointer
-        "auto"; 
+      //give back functionality to pointer
+      document.body.style.pointerEvents = "auto"; 
     }, 200);
 
     //in the hardest level shuffeling every 400 ms

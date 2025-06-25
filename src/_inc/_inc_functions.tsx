@@ -2,7 +2,7 @@
 // ---------------------------file with included functions to make cleaner and more readable code
 // ---------------------------
 
-// ---------------------------function for shuffle
+// ---------------------------functions for shuffle
 
 // export function _shuffleArray(arrayIn: any[]) {
 /*-------------------------------------------------partial f. to shuffle random positions in array stolen from : https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array  (EDIT: Updating to ES6 / ECMAScript 2015) */
@@ -17,6 +17,32 @@ export function _shuffleArray<T>(arrayIn: T[]): T[] {
   return array;
 }
 
+/*----------------------------------------------------------------------------------------*/
+import type { My_Type_DivImg } from "./my_types";
+
+// shuffle unmatched pexeso cards wth class 'mask'
+export function _shuffleUnMatchedCards(afterUnMatchArr: My_Type_DivImg[]) {
+  // array of 'mask' divs
+  const maskCards = afterUnMatchArr.filter((div) =>
+    div.classNames.includes("mask")
+  );
+
+  // shuffle mask divs
+  const shuffled = _shuffleArray(maskCards);
+
+  // new array where 'mask' divs are replaced with shuffled 'mask'
+  let shuffledIndex = 0;
+  afterUnMatchArr = afterUnMatchArr.map((div) => {
+    if (div.classNames.includes("mask")) {
+      return shuffled[shuffledIndex++];
+    } else {
+      return div;
+    }
+  });
+
+  return afterUnMatchArr;
+}
+/*----------------------------------------------------------------------------------------*/
 //  /*-------function for time formating from seconds  */
 
 export function _myFormatSeconds(seconds: number): string {
@@ -40,7 +66,7 @@ export function _myToggle(
   elm.classList.remove(removedClass);
 }
 
-//---------------------------- type Guard functions for typescript 
+//---------------------------- type Guard functions for typescript
 export function my_Type_Guard_function<My_Type extends string>(
   value: string,
   arr: readonly My_Type[]

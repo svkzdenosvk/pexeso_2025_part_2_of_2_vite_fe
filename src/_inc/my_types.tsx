@@ -18,7 +18,8 @@ export type My_Type_ClassNames =
   | "mask"
   | "selected_Div_img"
   | "rotate-center"
-  | "div_on_click";
+  | "div_on_click"
+  | "disabled";
 
 export type My_Type_Image = {
   id: string;

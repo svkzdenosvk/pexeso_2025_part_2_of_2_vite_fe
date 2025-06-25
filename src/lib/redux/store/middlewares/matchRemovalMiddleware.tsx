@@ -13,21 +13,26 @@ export const matchRemovalMiddleware: Middleware<unknown> =
       "type" in action &&
       action.type === match.type
     ) {
-      next(action); // -----------------------------------------------------------firstly trigger match action
+      //firstly trigger match action
+      next(action); 
 
       void document.body.offsetHeight;
 
-      setTimeout(() => {
-        storeAPI.dispatch(remove_after_match()); //------------------------------after match -> remove pictures (it´s about animations)
+       setTimeout(() => {
+      //after match -> hide pictures 
+      storeAPI.dispatch(remove_after_match()); 
 
-        const state = storeAPI.getState();
-        const arrayLength = state.game.divImgs.length;
+      const state = storeAPI.getState();
+      const allImgs = state.game.divImgs;
 
-        if (arrayLength === 0) {
-          //---------------------------------------------when all images are removed
-          storeAPI.dispatch(end_game());
-        }
-      }, 200);
+      const disabledImgs = document.getElementsByClassName("disabled");
+     
+      // when all images are removed -> the game is over
+      if (allImgs.length === disabledImgs.length+2) {
+        
+        storeAPI.dispatch(end_game());
+      }
+       }, 200);
     } else {
       next(action);
     }
