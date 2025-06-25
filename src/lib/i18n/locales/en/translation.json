@@ -37,9 +37,9 @@
           "hard": "Hard"
         },
         "description": {
-          "easy": "Images don't shuffle, but matched pairs are removed and the rest slide together.",
-          "medium": "Images are shuffled after each failed pair.",
-          "hard": "Images are shuffled almost every second."
+          "easy": "A classic real-life memory game.",
+          "medium": "The arrangement of unguessed images is shuffled after each unguessed attempt",
+          "hard": "The arrangement of guessed and unguessed images is shuffled almost every half-second."
         }
       }
     }

@@ -37,9 +37,9 @@
           "hard": "Ťažký"
         },
         "description": {
-          "easy": "Obrázky sa nemiešajú, ale uhádnuté sa vymažú a zvyšné sa posúvajú k sebe.",
-          "medium": "Usporiadanie obrázkov sa mieša po každej neuhádnutej dvojici.",
-          "hard": "Usporiadanie obrázkov sa mieša takmer každú sekundu."
+          "easy": "Klasické pexeso ako v reálnom živote.",
+          "medium": "Usporiadanie neuhádnutých obrázkov sa mieša po každom neuhádnutom pokuse.",
+          "hard": "Usporiadanie obrázkov uhádnutých aj neuhádnutých sa mieša takmer každú polsekundu."
         }
       }
     }

@@ -37,9 +37,9 @@
           "hard": "Schwer"
         },
         "description": {
-          "easy": "Bilder werden nicht gemischt, aber erratene Paare verschwinden und die restlichen rücken zusammen.",
-          "medium": "Die Anordnung der Bilder wird nach jedem Fehlversuch neu gemischt.",
-          "hard": "Die Anordnung der Bilder wird fast jede Sekunde neu gemischt."
+          "easy": "Ein klassisches Gedächtnisspiel aus dem wirklichen Leben.",
+          "medium": "Die Anordnung der unerkannten Bilder wird nach jedem unerkannten Versuch neu gemischt.",
+          "hard": "Die Anordnung der erratenen und nicht erratenen Bilder wird fast jede halbe Sekunde neu gemischt."
         }
       }
     }
