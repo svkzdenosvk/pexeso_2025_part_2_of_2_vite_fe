@@ -26,6 +26,8 @@ import AboutGame from "@pexeso/components/OutsideTheGame/pages/AboutGame";
 import Images from "@pexeso/components/OutsideTheGame/pages/Images";
 import SingleImg from "@pexeso/components/OutsideTheGame/pages/SingleImg";
 import ErrorPage from "@pexeso/components/OutsideTheGame/pages/ErrorPage";
+import Registration from "@pexeso/components/LogReg/Registration";
+import Login from "@pexeso/components/LogReg/Login";
 
 // ---------- component
 const App = () => {
@@ -104,7 +106,7 @@ const App = () => {
   const storedLocalStorageLang = localStorage.getItem("lang");
   const setlang =
     storedLocalStorageLang || i18n.language || LANGUAGE_CONFIG.fallbackLang;
- 
+
   return (
     <ThemeProvider theme={currentTheme}>
       <CssBaseline />
@@ -120,6 +122,8 @@ const App = () => {
               <Route element={<SharedLayout />}>
                 <Route index element={<Home />} />
                 <Route path="settings" element={<GameSettings />} />
+                <Route path="login" element={<Login />} />
+                <Route path="registration" element={<Registration />} />
 
                 <Route path="about-game" element={<SharedAboutLayout />}>
                   <Route index element={<AboutGame />} />

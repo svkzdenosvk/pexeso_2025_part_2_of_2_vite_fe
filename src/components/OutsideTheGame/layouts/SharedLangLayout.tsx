@@ -5,7 +5,7 @@ const SharedLangLayout = () => {
   return (
     <>
       <LanguageInit />
-      
+
       <Outlet />
     </>
   );

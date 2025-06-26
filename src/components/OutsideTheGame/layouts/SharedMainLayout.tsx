@@ -1,8 +1,9 @@
-import { Outlet,Link, useParams} from "react-router-dom";
+import { Outlet, Link, useParams } from "react-router-dom";
 import { Box, Button } from "@mui/material";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import { sharedNavLinkStyles } from "@pexeso/components/StylingComp/SharedStyles";
-import  TranslateButtons from '../TranslateButtons'
+import TranslateButtons from "../TranslateButtons";
+import ButtonLogReg from "@pexeso/components/LogReg/ButtonLogReg";
 
 // ---------- sx styles
 
@@ -49,7 +50,7 @@ const mainContentStyles = {
   flexDirection: "row",
   minHeight: "100%",
   width: "100%",
-    // justifyContent: "center",
+  // justifyContent: "center",
   "@media (max-width:600px)": {
     flexDirection: "column",
   },
@@ -59,32 +60,31 @@ const mainContentStyles = {
 
 const SharedLayout = () => {
   const { t } = useTranslation();
-const { lang } = useParams();
+  const { lang } = useParams();
   return (
     <Box sx={sharedWrapperStyles}>
-            {/* <LanguageInit /> */}
-      
-      <TranslateButtons/>
+      <ButtonLogReg />
+
+      <TranslateButtons />
       <Box sx={sharedHeaderNavigation}>
         <Box sx={navStyles}>
-             <Button
+          <Button
             component={Link}
             to={`/${lang}/about-game`}
             variant="contained"
             sx={[sharedNavLinkStyles, navLinkStyles]}
           >
-            {t('shared_main_nav.about_link')}
+            {t("shared_main_nav.about_link")}
           </Button>
-         
+
           <Button
             component={Link}
             to={`/${lang}/settings`}
             variant="contained"
             sx={[sharedNavLinkStyles, navLinkStyles]}
           >
-            {t('shared_main_nav.game_link')}
+            {t("shared_main_nav.game_link")}
           </Button>
-         
         </Box>
       </Box>
       <Box sx={mainContentStyles}>

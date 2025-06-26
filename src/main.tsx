@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import LoadingScreen from "@pexeso/components/OutsideTheGame/pages/LoadingScreen"; // môžeš si vytvoriť vlastný loader
+import LoadingScreen from "@pexeso/components/OutsideTheGame/pages/LoadingScreen"; 
 import i18n from "@pexeso/lib/i18n/i18n";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
@@ -7,7 +7,7 @@ import { store } from "@pexeso/lib/redux/store/store";
 import App from "./App";
 import "./index.css";
 
-// Funkcia, ktorá čaká kým je i18n inicializovaný
+// function waiting until i18n is initialized
 function waitForI18nInit(): Promise<void> {
   return new Promise((resolve) => {
     if (i18n.isInitialized) return resolve();
@@ -19,7 +19,6 @@ waitForI18nInit().then(() => {
   document.getElementById("loading")?.remove();
   const container = document.getElementById("result");
 
-  // document.getElementById("loading")?.remove(); //after loading delete temporary message
 
   if (container) {
     const root = createRoot(container);
