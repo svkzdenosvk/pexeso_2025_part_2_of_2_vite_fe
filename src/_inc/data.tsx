@@ -1,5 +1,5 @@
-import { projectFirestore } from "../lib/firebase/config";
-import { collection, getDocs } from "firebase/firestore";
+// import { projectFirestore } from "../lib/firebase/config";
+// import { collection, getDocs } from "firebase/firestore";
 import { _shuffleArray } from "./_inc_functions";
 import type {
   My_Type_Img_Name,
@@ -12,31 +12,31 @@ import type {
 import { v4 as uuidv4 } from "uuid";
 
 // fun. to fetch img names from db
-export async function fetchOnlyImgNames() {
-  //create empty array -> it will be filled with img´s names
-  const arrImg: My_Type_Img_Name[] = [];
+// export async function fetchOnlyImgNames() {
+//   //create empty array -> it will be filled with img´s names
+//   const arrImg: My_Type_Img_Name[] = [];
 
-  try {
-    //loading docs from Firebase
-    const snapshot = await getDocs(
-      collection(projectFirestore, "pexeso-img-names")
-    );
-    snapshot.forEach((doc) => {
-      const name: My_Type_Img_Name = doc.data().name;
+//   try {
+//     //loading docs from Firebase
+//     const snapshot = await getDocs(
+//       collection(projectFirestore, "pexeso-img-names")
+//     );
+//     snapshot.forEach((doc) => {
+//       const name: My_Type_Img_Name = doc.data().name;
 
-      if (name) {
-        //add name to array
-        arrImg.push(name);
-      }
-    });
-  } catch (error) {
-    console.error("Chyba pri načítaní dát z Firestore:", error);
-    //if error return empty array
-    return [];
-  }
+//       if (name) {
+//         //add name to array
+//         arrImg.push(name);
+//       }
+//     });
+//   } catch (error) {
+//     console.error("Chyba pri načítaní dát z Firestore:", error);
+//     //if error return empty array
+//     return [];
+//   }
 
-  return arrImg;
-}
+//   return arrImg;
+// }
 
 export async function createDivsArrayFromImgNamesAndCountImg(
   selectedCountOfImg: My_Type_ImgCount,
@@ -78,7 +78,9 @@ export function preloadImages(imgNamesArr: My_Type_Img_Name[]) {
       return new Promise((resolve, reject) => {
         const img = new Image();
 
-        img.src = "/pictures/pexeso/" + picture + ".jpg";
+        // img.src = "/pictures/pexeso/" + picture + ".jpg";
+                img.src = "/pictures/pexeso/" + picture + ".jpg";
+
         img.onload = async () => {
           try {
             await img.decode(); // waiting for decoding :contentReference[oaicite:3]{index=3}

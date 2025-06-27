@@ -24,13 +24,13 @@ waitForI18nInit().then(() => {
     const root = createRoot(container);
 
     root.render(
-      <React.StrictMode>
+       <React.StrictMode>
         <Suspense fallback={<LoadingScreen />}>
           <Provider store={store}>
             <App />
           </Provider>
         </Suspense>
-      </React.StrictMode>
+       </React.StrictMode>
     );
   } else {
     console.error("Container element with ID 'result' not found.");

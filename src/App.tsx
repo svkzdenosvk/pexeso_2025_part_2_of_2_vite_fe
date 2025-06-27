@@ -5,11 +5,11 @@ import { ThemeProvider, CssBaseline } from "@mui/material";
 import { Box } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { LANGUAGE_CONFIG } from "@pexeso/lib/i18n/i18n_MySettings";
-import { fetchOnlyImgNames, preloadImages } from "@pexeso/_inc/data";
+import { /*fetchOnlyImgNames,*/ preloadImages } from "@pexeso/_inc/data";
 import type { My_Type_Theme } from "@pexeso/_inc/my_types";
 import type { RootState } from "@pexeso/lib/redux/store/store";
 import {
-  set_img_names,
+  // set_img_names,
   set_loading,
 } from "@pexeso/lib/redux/store/reducers/gameSlice";
 import { defaultTheme } from "@pexeso/components/StylingComp/themes/defaultTheme";
@@ -29,11 +29,22 @@ import ErrorPage from "@pexeso/components/OutsideTheGame/pages/ErrorPage";
 import Registration from "@pexeso/components/LogReg/Registration";
 import Login from "@pexeso/components/LogReg/Login";
 
+// import drop from '@pexeso/assets/pictures/pexeso/drop.jpg';
+// import lightning from '@pexeso/assets/pictures/pexeso/lightning.jpg';
+// import wood from '@pexeso/assets/pictures/pexeso/wood.jpg';
+// import wind from '@pexeso/assets/pictures/pexeso/wind.jpg';
+// import vibration from '@pexeso/assets/pictures/pexeso/vibration.jpg';
+// import sun from '@pexeso/assets/pictures/pexeso/sun.jpg';
+// import space from '@pexeso/assets/pictures/pexeso/space.jpg';
+// import sea from '@pexeso/assets/pictures/pexeso/sea.jpg';
+
 // ---------- component
 const App = () => {
   const { i18n } = useTranslation();
   //------------------------------------redux-----------------------------------------
   const dispatch = useDispatch();
+
+// const importedImgNames=["drop", "wood", "lightning", "wind", "vibration", "sun" , "space", "sea"]
 
   const {
     imgNames,
@@ -66,21 +77,23 @@ const App = () => {
     justifyContent: isEnd ? "center" : "flex-start",
   };
 
-  useEffect(() => {
-    const fetchImgNamesFunc = async () => {
-      try {
-        //fetching img names from firebase
-        const fetchedImgNames = await fetchOnlyImgNames();
 
-        dispatch(set_img_names(fetchedImgNames));
-      } catch (error) {
-        console.error("Error fetching names:", error);
-      }
-    };
 
-    //to call async f.
-    fetchImgNamesFunc();
-  }, [dispatch]);
+  // useEffect(() => {
+  //   const fetchImgNamesFunc = async () => {
+  //     try {
+  //       //fetching img names from firebase
+  //       const fetchedImgNames = await fetchOnlyImgNames();
+
+        //  dispatch(set_img_names(fetchedImgNames));
+  //     } catch (error) {
+  //       console.error("Error fetching names:", error);
+  //     }
+  //   };
+
+  //   //to call async f.
+  //   fetchImgNamesFunc();
+  // }, [dispatch]);
 
   useEffect(() => {
     if (!isLoading) return;
@@ -104,8 +117,7 @@ const App = () => {
 
   //redirect with right lang prefix
   const storedLocalStorageLang = localStorage.getItem("lang");
-  const setlang =
-    storedLocalStorageLang || i18n.language || LANGUAGE_CONFIG.fallbackLang;
+  const setlang = storedLocalStorageLang || i18n.language || LANGUAGE_CONFIG.fallbackLang;
 
   return (
     <ThemeProvider theme={currentTheme}>
