@@ -1,5 +1,13 @@
 import { useState } from "react";
-import { TextField, Button, Alert, Box } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Alert,
+  Box,
+  IconButton,
+  InputAdornment,
+} from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 
@@ -20,9 +28,11 @@ export const Registration = () => {
     confirm: "",
   });
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate(); // 👈 pridaj
   const { lang } = useParams();
 
+  //function for validation of form 
   const validate = () => {
     const { password, confirm, name, email } = form;
     if (name.length < 3) return "Meno musí byť min 3 znaky dlhé";
@@ -32,7 +42,7 @@ export const Registration = () => {
     if (password.length < 6 || password.length > 20)
       return "Heslo musí mať 6 až 20 znakov.";
     if (!/[A-Z]/.test(password)) return "Heslo musí obsahovať veľké písmeno.";
-    if (!/[!@#$%^&*]/.test(password))
+    if (!/[!@#$%^&*-]/.test(password))
       return "Heslo musí obsahovať špeciálny znak.";
     if (password !== confirm) return "Heslá sa nezhodujú.";
     return "";
@@ -80,12 +90,29 @@ export const Registration = () => {
         sx={sxStyles.input}
         onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
       />
+      
       <TextField
         label="Heslo"
-        type="password"
+        type={showPassword ? "text" : "password"}
         sx={sxStyles.input}
         onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
+        slotProps={{
+          input: {
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={() => setShowPassword((show) => !show)}
+                  edge="end"
+                  aria-label="toggle password visibility"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          },
+        }}
       />
+
       <TextField
         label="Potvrď heslo"
         type="password"

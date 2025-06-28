@@ -1,90 +1,91 @@
-import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { Box, Button, TextField, Typography, Alert } from "@mui/material";
+import { useState } from "react";
+import {
+  TextField,
+  Button,
+  Alert,
+  Box,
+  IconButton,
+  InputAdornment,
+} from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { FirebaseError } from "firebase/app";
+import { auth } from "@pexeso/lib/firebase/firestoreConfigUsers";
+import { useNavigate, useParams } from "react-router-dom";
 
-// Reuse styled container
-const styles = {
-  container: {
-    maxWidth: 400,
-    margin: "0 auto",
-    padding: 4,
-    display: "flex",
-    flexDirection: "column",
-    gap: 2,
-    border: "1px solid #ccc",
-    borderRadius: 2,
-  },
+const sxStyles = {
+  input: { mb: 2, width: "100%" },
+  form: { maxWidth: 400, mx: "auto", mt: 4 },
 };
 
 export const Login = () => {
-  const location = useLocation();//Keď sa niekam navigate()-neš s state, tak na tej novej stránke to vieš získať cez useLocation():
-
-  const navigate = useNavigate();
-  const [showSuccess, setShowSuccess] = useState(false);
-
-  const [email, setEmail] = useState("");
-  const [pass, setPass] = useState("");
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const { lang } = useParams();
 
-  useEffect(() => {
-    if (location.state?.fromRegister) {
-      setShowSuccess(true);
-
-      // odstráň state z history, aby alert neprežil refresh
-       navigate(location.pathname, { replace: true });
+  const handleLogin = async () => {
+    try {
+      await signInWithEmailAndPassword(auth, form.email, form.password);
+      setError("");
+      navigate(`/${lang}/game`);
+    } catch (e) {
+      const err = e as FirebaseError;
+      switch (err.code) {
+        case "auth/invalid-credential":
+        case "auth/invalid-credentials":
+          setError("Email alebo heslo je nesprávne.");
+          break;
+        case "auth/too-many-requests":
+          setError("Príliš veľa pokusov. Skúste znova neskôr.");
+          break;
+        case "auth/network-request-failed":
+          setError("Sieťová chyba. Skontrolujte pripojenie.");
+          break;
+        default:
+          setError("Pri prihlasovaní nastala neznáma chyba.");
+      }
     }
-  }, [location, navigate]);
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // TODO: Firebase login – neskôr pridáme
-    if (!email.includes("@")) {
-      setError("Zadaný email nie je registrovaný.");
-      return;
-    }
-
-    if (pass.length < 3) {
-      setError("Nesprávne heslo.");
-      return;
-    }
-
-    setError("");
-    console.log("✅ Prihlásený ako:", email);
   };
 
   return (
-    <>
-      {showSuccess && (
-        <Alert severity="success" sx={{ mb: 2 }}>
-          Registrácia prebehla úspešne. Teraz sa môžete prihlásiť.
+    <Box sx={sxStyles.form}>
+      <TextField
+        label="Email"
+        sx={sxStyles.input}
+        value={form.email}
+        onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+      />
+      <TextField
+        label="Heslo"
+        type={showPassword ? "text" : "password"}
+        sx={sxStyles.input}
+        value={form.password}
+        onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                onClick={() => setShowPassword((show) => !show)}
+                edge="end"
+                aria-label="toggle password visibility"
+              >
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+      />
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
         </Alert>
       )}
-      <Box sx={styles.container} component="form" onSubmit={handleLogin}>
-        <Typography variant="h5">Prihlásenie</Typography>
-
-        <TextField
-          label="Email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <TextField
-          label="Heslo"
-          type="password"
-          value={pass}
-          onChange={(e) => setPass(e.target.value)}
-          required
-        />
-
-        {error && <Alert severity="error">{error}</Alert>}
-
-        <Button type="submit" variant="contained" color="primary">
-          Prihlásiť sa
-        </Button>
-      </Box>
-    </>
+      <Button variant="contained" fullWidth onClick={handleLogin}>
+        Prihlásiť sa
+      </Button>
+    </Box>
   );
 };
 

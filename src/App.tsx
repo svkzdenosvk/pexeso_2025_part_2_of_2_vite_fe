@@ -29,22 +29,11 @@ import ErrorPage from "@pexeso/components/OutsideTheGame/pages/ErrorPage";
 import Registration from "@pexeso/components/LogReg/Registration";
 import Login from "@pexeso/components/LogReg/Login";
 
-// import drop from '@pexeso/assets/pictures/pexeso/drop.jpg';
-// import lightning from '@pexeso/assets/pictures/pexeso/lightning.jpg';
-// import wood from '@pexeso/assets/pictures/pexeso/wood.jpg';
-// import wind from '@pexeso/assets/pictures/pexeso/wind.jpg';
-// import vibration from '@pexeso/assets/pictures/pexeso/vibration.jpg';
-// import sun from '@pexeso/assets/pictures/pexeso/sun.jpg';
-// import space from '@pexeso/assets/pictures/pexeso/space.jpg';
-// import sea from '@pexeso/assets/pictures/pexeso/sea.jpg';
-
 // ---------- component
 const App = () => {
   const { i18n } = useTranslation();
   //------------------------------------redux-----------------------------------------
   const dispatch = useDispatch();
-
-// const importedImgNames=["drop", "wood", "lightning", "wind", "vibration", "sun" , "space", "sea"]
 
   const {
     imgNames,
@@ -76,24 +65,6 @@ const App = () => {
     alignItems: "center",
     justifyContent: isEnd ? "center" : "flex-start",
   };
-
-
-
-  // useEffect(() => {
-  //   const fetchImgNamesFunc = async () => {
-  //     try {
-  //       //fetching img names from firebase
-  //       const fetchedImgNames = await fetchOnlyImgNames();
-
-        //  dispatch(set_img_names(fetchedImgNames));
-  //     } catch (error) {
-  //       console.error("Error fetching names:", error);
-  //     }
-  //   };
-
-  //   //to call async f.
-  //   fetchImgNamesFunc();
-  // }, [dispatch]);
 
   useEffect(() => {
     if (!isLoading) return;
