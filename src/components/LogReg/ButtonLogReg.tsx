@@ -1,8 +1,9 @@
 import { Box, Button, Typography } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "@pexeso/lib/redux/store/store"; 
-import { clearUser } from "@pexeso/lib/redux/store/reducers/authSlice"; // ak máš logout action
+import type { RootState } from "@pexeso/lib/redux/store/store";
+import { clearUser } from "@pexeso/lib/redux/store/reducers/authSlice";
 import { signOut } from "firebase/auth";
 import { auth } from "@pexeso/lib/firebase/firestoreConfigUsers";
 
@@ -28,19 +29,20 @@ const styles = {
 export const ButtonLogReg = () => {
   const { lang } = useParams();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
-  const {user} = useSelector((state: RootState) => state.auth);
+  const { user } = useSelector((state: RootState) => state.auth);
 
   const handleLogout = async () => {
-    await signOut(auth);  
+    await signOut(auth);
     dispatch(clearUser());
   };
 
-  
   return (
     <Box sx={styles.wrapper}>
       <Typography variant="body1">
-        {user?.name ? `Prihlásený: ${user.name}` : "Hosť"}
+        {/* {user?.name ? `Prihlásený: ${user.name}` : "Hosť"} */}
+        {user?.name && user.name}	
       </Typography>
 
       {!user?.uid ? (
@@ -51,7 +53,7 @@ export const ButtonLogReg = () => {
             variant="contained"
             sx={styles.linkButton}
           >
-            Registrácia
+            {t("reg_log_btn.reg")}
           </Button>
           <Button
             component={Link}
@@ -59,7 +61,7 @@ export const ButtonLogReg = () => {
             variant="contained"
             sx={styles.linkButton}
           >
-            Prihlásenie
+            {t("reg_log_btn.log")}
           </Button>
         </>
       ) : (
@@ -68,7 +70,8 @@ export const ButtonLogReg = () => {
           sx={styles.linkButton}
           onClick={handleLogout}
         >
-          Odhlásiť sa
+       
+          {t("reg_log_btn.log_out")} 
         </Button>
       )}
     </Box>

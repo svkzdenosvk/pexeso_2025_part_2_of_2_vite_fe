@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 import {
   TextField,
   Button,
@@ -25,6 +26,7 @@ const sxStyles = {
 // ---------- component
 
 export const Login = () => {
+  const { t } = useTranslation();
   const location = useLocation(); // when U navigate with state, then on new page U can get state with useLocation
 
   const [form, setForm] = useState({ email: "", password: "" });
@@ -40,7 +42,7 @@ export const Login = () => {
     if (location.state?.fromRegister) {
       setShowSuccess(true);
 
-      // delete state (flag) from history, alert not exists after refresh 
+      // delete state (flag) from history, alert not exists after refresh
       navigate(location.pathname, { replace: true });
     }
   }, [location, navigate]);
@@ -54,7 +56,7 @@ export const Login = () => {
       );
       const docSnap = await getDoc(doc(projectUsers, "users", res.user.uid));
       const data = docSnap.data();
-      
+
       //setup user in redux
       dispatch(
         setUser({
@@ -71,62 +73,71 @@ export const Login = () => {
       switch (err.code) {
         case "auth/invalid-credential":
         case "auth/invalid-credentials":
-          setError("Email alebo heslo je nesprávne.");
+          setError("login_page.error_alert.invalid_credentials");
           break;
         case "auth/too-many-requests":
-          setError("Príliš veľa pokusov. Skúste znova neskôr.");
+          setError("login_page.error_alert.too_many_req");
           break;
         case "auth/network-request-failed":
-          setError("Sieťová chyba. Skontrolujte pripojenie.");
+          setError("login_page.error_alert.net_req_failed");
           break;
         default:
-          setError("Pri prihlasovaní nastala neznáma chyba.");
+          setError("login_page.error_alert.unknow_err");
       }
     }
   };
 
   return (
     <PublicOnlyRoute>
-      {showSuccess && (
-        <Alert severity="success" sx={{ mb: 2 }}>
-          Registrácia prebehla úspešne. Teraz sa môžete prihlásiť.
-        </Alert>
-      )}
-      <Box sx={sxStyles.form}>
-        <TextField
-          label="Email"
-          sx={sxStyles.input}
-          value={form.email}
-          onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-        />
-        <TextField
-          label="Heslo"
-          type={showPassword ? "text" : "password"}
-          sx={sxStyles.input}
-          value={form.password}
-          onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton
-                  onClick={() => setShowPassword((show) => !show)}
-                  edge="end"
-                  aria-label="toggle password visibility"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-        {error && (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {error}
+      <Box sx={{ mx: "auto" }}>
+        {showSuccess && (
+          <Alert severity="success" sx={{ mb: 2 }}>
+            {t("login_page.success_login")}
           </Alert>
         )}
-        <Button sx={{  px: 1, py: 2, fontWeight: 'bold'}} variant="contained" fullWidth onClick={handleLogin}>
-          Prihlásiť sa
-        </Button>
+        <Box sx={sxStyles.form}>
+          <TextField
+            label={t("reg_page.label.email")}
+            sx={sxStyles.input}
+            value={form.email}
+            onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+          />
+          <TextField
+            label={t("reg_page.label.pass_conf")}
+            type={showPassword ? "text" : "password"}
+            sx={sxStyles.input}
+            value={form.password}
+            onChange={(e) =>
+              setForm((f) => ({ ...f, password: e.target.value }))
+            }
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setShowPassword((show) => !show)}
+                    edge="end"
+                    aria-label="toggle password visibility"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {t(error)}
+            </Alert>
+          )}
+          <Button
+            sx={{ px: 1, py: 2, fontWeight: "bold" }}
+            variant="contained"
+            fullWidth
+            onClick={handleLogin}
+          >
+            {t("login_page.btn_login")}
+          </Button>
+        </Box>
       </Box>
     </PublicOnlyRoute>
   );
