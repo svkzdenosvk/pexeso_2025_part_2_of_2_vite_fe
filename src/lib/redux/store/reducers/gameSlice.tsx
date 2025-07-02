@@ -168,6 +168,7 @@ const gameSlice = createSlice({
     // set_img_names: (state, action) => {
     //   state.imgNames = action.payload;
     // },
+    
     //after loading imgs (in app.tsx)
     set_loading: (state) => {
       state.isLoading = false;

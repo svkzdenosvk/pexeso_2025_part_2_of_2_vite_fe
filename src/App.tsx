@@ -3,15 +3,16 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { Box } from "@mui/material";
+import { auth, projectUsers } from "@pexeso/lib/firebase/firestoreConfigUsers";
+import { onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 import { useTranslation } from "react-i18next";
 import { LANGUAGE_CONFIG } from "@pexeso/lib/i18n/i18n_MySettings";
 import { /*fetchOnlyImgNames,*/ preloadImages } from "@pexeso/_inc/data";
 import type { My_Type_Theme } from "@pexeso/_inc/my_types";
 import type { RootState } from "@pexeso/lib/redux/store/store";
-import {
-  // set_img_names,
-  set_loading,
-} from "@pexeso/lib/redux/store/reducers/gameSlice";
+import { set_loading } from "@pexeso/lib/redux/store/reducers/gameSlice";
+import { setUser, clearUser } from "@pexeso/lib/redux/store/reducers/authSlice";
 import { defaultTheme } from "@pexeso/components/StylingComp/themes/defaultTheme";
 import { mediumTheme } from "@pexeso/components/StylingComp/themes/mediumTheme";
 import { hardTheme } from "@pexeso/components/StylingComp/themes/hardTheme";
@@ -30,6 +31,7 @@ import Registration from "@pexeso/components/LogReg/Registration";
 import Login from "@pexeso/components/LogReg/Login";
 
 // ---------- component
+
 const App = () => {
   const { i18n } = useTranslation();
   //------------------------------------redux-----------------------------------------
@@ -66,6 +68,46 @@ const App = () => {
     justifyContent: isEnd ? "center" : "flex-start",
   };
 
+  //------------------------------------------------------------------------------------------------------------
+
+  
+  useEffect(() => {
+  const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    if (user?.email) {
+      try {
+        const docRef = doc(projectUsers, "users", user.uid);
+        const docSnap = await getDoc(docRef);
+
+        if (!docSnap.exists()) {
+
+          //sign out user without profile in Firestore
+          await auth.signOut(); 
+          dispatch(clearUser());
+          return;
+        }
+
+        const data = docSnap.data();
+        dispatch(
+          setUser({
+            uid: user.uid,
+            name: data?.name ?? "",
+            email: user.email,
+          })
+        );
+      } catch (err) {
+        // error during checking of profile in Firestore
+        console.error("Error during checking of profile in Firestore:", err);
+        dispatch(clearUser());
+      }
+    } else {
+      //user is logged out so could be clear also in redux
+      dispatch(clearUser());
+    }
+  });
+
+  return () => unsubscribe(); // cleanup
+}, [dispatch]);
+
   useEffect(() => {
     if (!isLoading) return;
 
@@ -88,7 +130,8 @@ const App = () => {
 
   //redirect with right lang prefix
   const storedLocalStorageLang = localStorage.getItem("lang");
-  const setlang = storedLocalStorageLang || i18n.language || LANGUAGE_CONFIG.fallbackLang;
+  const setlang =
+    storedLocalStorageLang || i18n.language || LANGUAGE_CONFIG.fallbackLang;
 
   return (
     <ThemeProvider theme={currentTheme}>

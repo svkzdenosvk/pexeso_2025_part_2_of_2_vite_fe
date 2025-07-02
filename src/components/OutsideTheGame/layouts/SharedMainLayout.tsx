@@ -3,7 +3,7 @@ import { Box, Button } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { sharedNavLinkStyles } from "@pexeso/components/StylingComp/SharedStyles";
 import TranslateButtons from "../TranslateButtons";
-import ButtonLogReg from "@pexeso/components/LogReg/ButtonLogReg";
+// import ButtonLogReg from "@pexeso/components/LogReg/ButtonLogReg";
 
 // ---------- sx styles
 
@@ -63,7 +63,7 @@ const SharedLayout = () => {
   const { lang } = useParams();
   return (
     <Box sx={sharedWrapperStyles}>
-      <ButtonLogReg />
+      {/* <ButtonLogReg /> */}
 
       <TranslateButtons />
       <Box sx={sharedHeaderNavigation}>

@@ -1,37 +1,49 @@
-import { useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "@pexeso/lib/redux/store/store"; 
+import { clearUser } from "@pexeso/lib/redux/store/reducers/authSlice"; // ak máš logout action
+import { signOut } from "firebase/auth";
+import { auth } from "@pexeso/lib/firebase/firestoreConfigUsers";
 
-// Štýly mimo JSX
 const styles = {
   wrapper: {
     display: "flex",
+    width: "100%",
     justifyContent: "flex-end",
     alignItems: "center",
     gap: 2,
     p: 2,
-    borderBottom: "1px solid #ddd",
   },
   linkButton: {
     textTransform: "none",
     fontSize: "1rem",
+    px: 2,
+    py: 1,
   },
 };
 
-export const ButtonLogReg = () => {
-  // Neskôr zameníme za stav z Firebase / Redux
-  const [userName, setUserName] = useState<string | null>(null);
-  const { lang } = useParams();
-//   const handleFakeLogin = () => setUserName("Zdenko");
-  const handleLogout = () => setUserName(null);
+// ---------- component
 
+export const ButtonLogReg = () => {
+  const { lang } = useParams();
+  const dispatch = useDispatch();
+
+  const {user} = useSelector((state: RootState) => state.auth);
+
+  const handleLogout = async () => {
+    await signOut(auth);  
+    dispatch(clearUser());
+  };
+
+  
   return (
     <Box sx={styles.wrapper}>
       <Typography variant="body1">
-        {userName ? `Prihlásený: ${userName}` : "Hosť"}
+        {user?.name ? `Prihlásený: ${user.name}` : "Hosť"}
       </Typography>
 
-      {!userName ? (
+      {!user?.uid ? (
         <>
           <Button
             component={Link}
@@ -47,12 +59,15 @@ export const ButtonLogReg = () => {
             variant="contained"
             sx={styles.linkButton}
           >
-            Prihlásenie{" "}
+            Prihlásenie
           </Button>
-          
         </>
       ) : (
-        <Button sx={styles.linkButton} onClick={handleLogout}>
+        <Button
+          variant="contained"
+          sx={styles.linkButton}
+          onClick={handleLogout}
+        >
           Odhlásiť sa
         </Button>
       )}
