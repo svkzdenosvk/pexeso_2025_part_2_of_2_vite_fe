@@ -10,6 +10,7 @@ import {
   InputAdornment,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import CircularProgress from "@mui/material/CircularProgress";
 import { FirebaseError } from "firebase/app";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import {
@@ -28,6 +29,8 @@ const sxStyles = {
 // ---------- component
 
 export const Registration = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { lang } = useParams();
@@ -58,10 +61,18 @@ export const Registration = () => {
   };
 
   const handleRegister = async () => {
+    //prevent double click on register btn and trigger error email already registered
+    setIsLoading(true);
     setError(""); // reset error
+
     //error from validate function
     const validationError = validate();
-    if (validationError) return setError(validationError);
+    if (validationError) {
+      setError(validationError);
+      // if error set loading to false -> prevent never ending disabled reg. button
+      setIsLoading(false);
+      return;
+    }
 
     try {
       //check whether email exists in Auth (Authentication in Firebase console)
@@ -114,6 +125,8 @@ export const Registration = () => {
       } else {
         setError("reg_page.error_alert.unexpected");
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -160,7 +173,7 @@ export const Registration = () => {
           onChange={(e) => setForm((f) => ({ ...f, confirm: e.target.value }))}
         />
         {error && (
-          <Alert severity="error" sx={{ mb: 2 }}>            
+          <Alert severity="error" sx={{ mb: 2 }}>
             {t(error)}
           </Alert>
         )}
@@ -169,6 +182,8 @@ export const Registration = () => {
           variant="contained"
           fullWidth
           onClick={handleRegister}
+          disabled={isLoading}
+          startIcon={isLoading && <CircularProgress size={20} />} //loading spinner
         >
           {t("reg_page.btn_reg")}
         </Button>

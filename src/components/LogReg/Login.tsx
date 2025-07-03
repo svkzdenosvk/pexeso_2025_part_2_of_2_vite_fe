@@ -11,6 +11,7 @@ import {
   InputAdornment,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import CircularProgress from "@mui/material/CircularProgress";
 import { FirebaseError } from "firebase/app";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
@@ -27,8 +28,8 @@ const sxStyles = {
 
 export const Login = () => {
   const { t } = useTranslation();
+  const [isLoading, setIsLoading] = useState(false);
   const location = useLocation(); // when U navigate with state, then on new page U can get state with useLocation
-
   const [form, setForm] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
@@ -48,6 +49,9 @@ export const Login = () => {
   }, [location, navigate]);
 
   const handleLogin = async () => {
+    setIsLoading(true);
+    setError("");
+
     try {
       const res = await signInWithEmailAndPassword(
         auth,
@@ -66,7 +70,7 @@ export const Login = () => {
         })
       );
 
-      setError("");
+      // setError("");
       navigate(`/${lang}/`);
     } catch (e) {
       const err = e as FirebaseError;
@@ -84,6 +88,8 @@ export const Login = () => {
         default:
           setError("login_page.error_alert.unknow_err");
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -134,6 +140,8 @@ export const Login = () => {
             variant="contained"
             fullWidth
             onClick={handleLogin}
+            disabled={isLoading}
+            startIcon={isLoading && <CircularProgress size={20} />} //loading spinner
           >
             {t("login_page.btn_login")}
           </Button>
