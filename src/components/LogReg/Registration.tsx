@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import {
   TextField,
@@ -19,6 +20,7 @@ import {
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 import { auth, projectUsers } from "@pexeso/lib/firebase/firestoreConfigUsers";
+import { reset_settings } from "@pexeso/lib/redux/store/reducers/gameSlice";
 import PublicOnlyRoute from "./PublicOnlyRoute";
 
 /**
@@ -67,6 +69,7 @@ export const Registration = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   // Navigation & route language param
   const navigate = useNavigate();
@@ -84,6 +87,11 @@ export const Registration = () => {
   const [error, setError] = useState("");
   // Toggles password visibility
   const [showPassword, setShowPassword] = useState(false);
+
+  // Reset settings from the game
+  useEffect(() => {
+    dispatch(reset_settings()); // reset game configuration
+  }, [dispatch]);
 
   /**
    * Validates registration form values.

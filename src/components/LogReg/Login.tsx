@@ -15,6 +15,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { FirebaseError } from "firebase/app";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
+import { reset_settings } from "@pexeso/lib/redux/store/reducers/gameSlice";
 import { setUser } from "@pexeso/lib/redux/store/reducers/authSlice";
 import { auth, projectUsers } from "@pexeso/lib/firebase/firestoreConfigUsers";
 import PublicOnlyRoute from "./PublicOnlyRoute";
@@ -69,6 +70,11 @@ export const Login = () => {
   const dispatch = useDispatch();
   const { lang } = useParams(); // get lang param from route
   const [showSuccess, setShowSuccess] = useState(false); // show success message (e.g., after register)
+
+  // Reset settings from the game
+  useEffect(() => {
+    dispatch(reset_settings()); // reset game configuration
+  }, [location.pathname, dispatch]);
 
   // ---------- Effect: Show success message after registration
   useEffect(() => {
