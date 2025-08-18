@@ -3,23 +3,57 @@ import { Button, ButtonGroup, Box } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { LANGUAGE_CONFIG } from "@pexeso/lib/i18n/i18n_MySettings";
 
+/**
+ * TranslateButtons Component
+ *
+ * Provides a set of buttons to switch the application language.
+ * Handles changing the language in i18next, saving the choice
+ * in localStorage, and updating the current URL to include
+ * the selected language prefix.
+ *
+ * Features:
+ * - Displays language buttons dynamically based on configuration.
+ * - Highlights the currently selected language.
+ * - Saves selection to localStorage.
+ * - Updates the URL to reflect the chosen language.
+ *
+ * @component
+ * @dependencies
+ * - MUI (Button, ButtonGroup, Box)
+ * - react-i18next (translations)
+ * - react-router-dom (navigation)
+ * - Internal language configuration (LANGUAGE_CONFIG)
+ *
+ * @example
+ * <TranslateButtons />
+ */
+
+// ---------- Component
+
 const TranslateButtons = () => {
   const { i18n } = useTranslation();
   const navigate = useNavigate();
 
   const currentLang = i18n.language;
 
-  //onClick function to change language, save l. to localStorage and rewrite lang prefix 
-  const changeLanguage = (lng: string) => {
+ /**
+   * Handles language change:
+   * 1. Changes language in i18next.
+   * 2. Updates localStorage.
+   * 3. Rewrites URL prefix to match new language.
+   */
+    const changeLanguage = (lng: string) => {
 
     i18n.changeLanguage(lng);
-    const pathParts = location.pathname.split("/").filter(Boolean); // for ex. ["de", "images"]
+
+    // Get current path parts, e.g. ["de", "images"]
+    const pathParts = location.pathname.split("/").filter(Boolean); 
     const restOfPath = pathParts.slice(1).join("/");
 
-    //save in localStorage
+    // Save language in localStorage
     localStorage.setItem("lang", lng!);
 
-    //redirect with new lang prefix
+    // Navigate to same page with new language prefix
     navigate(`/${lng}/${restOfPath}`);
   };
 
@@ -32,26 +66,29 @@ const TranslateButtons = () => {
         alignItems: "center",
       }}
     >
+      {/* Language selection buttons */}
       <ButtonGroup
         variant="outlined"
         color="primary"
         sx={{
-          boxShadow: 3,
+          boxShadow: 3, // medium shadow elevation
           borderRadius: "12px",
-          overflow: "hidden",
+          overflow: "hidden", // ensures child buttons respect border radius
         }}
       >
         {LANGUAGE_CONFIG.languages.map((lng) => (
           <Button
             key={lng}
             onClick={() => changeLanguage(lng)}
+
+            // Highlight current language with filled variant
             variant={currentLang === lng ? "contained" : "outlined"}
             sx={{
-              textTransform: "uppercase",
+              textTransform: "uppercase", // EN/SK/DE instead of En/Sk/De
               fontWeight: "bold",
               px: 2,
               py: 1,
-              fontSize: "0.85rem",
+              fontSize: "0.85rem",  // slightly smaller text
               minWidth: 50,
             }}
           >

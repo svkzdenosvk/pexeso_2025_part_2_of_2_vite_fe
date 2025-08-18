@@ -3,9 +3,29 @@ import { Box, Button } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { sharedNavLinkStyles } from "@pexeso/components/StylingComp/SharedStyles";
 import TranslateButtons from "../TranslateButtons";
-// import ButtonLogReg from "@pexeso/components/LogReg/ButtonLogReg";
 
-// ---------- sx styles
+/**
+ * SharedLayout Component
+ *
+ * Provides the common navigation bar and content wrapper for subpages.
+ *
+ * Features:
+ * - Language switcher (TranslateButtons)
+ * - Main navigation links (About Game, Game Settings)
+ * - Responsive navigation styles
+ * - Wrapper and layout styles for consistent page structure
+ *
+ * @component
+ * @dependencies
+ * - react-router-dom (Outlet, Link, useParams)
+ * - @mui/material (Box, Button)
+ * - react-i18next (useTranslation)
+ *
+ * @example
+ * <SharedLayout />
+ */
+
+// ---------- Sx styles
 
 const sharedWrapperStyles = {
   p: 0,
@@ -17,6 +37,7 @@ const sharedWrapperStyles = {
   flexDirection: "column",
 } as const;
 
+// Header container for the navigation bar
 const sharedHeaderNavigation = {
   height: "30vh",
   display: "flex",
@@ -24,6 +45,7 @@ const sharedHeaderNavigation = {
   justifyContent: "flex-end",
 } as const;
 
+// Navigation bar styles
 const navStyles = {
   display: "flex",
   width: "100%",
@@ -35,6 +57,7 @@ const navStyles = {
   },
 } as const;
 
+// Individual navigation link styles
 const navLinkStyles = {
   width: "50%",
 
@@ -45,6 +68,7 @@ const navLinkStyles = {
   },
 } as const;
 
+// Main content container styles
 const mainContentStyles = {
   display: "flex",
   flexDirection: "row",
@@ -52,22 +76,25 @@ const mainContentStyles = {
   width: "100%",
   // justifyContent: "center",
   "@media (max-width:600px)": {
-    flexDirection: "column",
+    flexDirection: "column", // Stack vertically on small screens
   },
 } as const;
 
-// ---------- component
+// ---------- Component
 
 const SharedLayout = () => {
   const { t } = useTranslation();
+  // Language parameter from the current route
   const { lang } = useParams();
   return (
+    // Wrapper for the entire layout
     <Box sx={sharedWrapperStyles}>
-      {/* <ButtonLogReg /> */}
-
+      {/* Language switcher */}
       <TranslateButtons />
+      {/* Header navigation */}
       <Box sx={sharedHeaderNavigation}>
         <Box sx={navStyles}>
+          {/* Navigation button to "About Game" section */}
           <Button
             component={Link}
             to={`/${lang}/about-game`}
@@ -77,6 +104,7 @@ const SharedLayout = () => {
             {t("shared_main_nav.about_link")}
           </Button>
 
+          {/* Navigation button to "Game Settings" section */}
           <Button
             component={Link}
             to={`/${lang}/settings`}
@@ -87,6 +115,7 @@ const SharedLayout = () => {
           </Button>
         </Box>
       </Box>
+      {/* Main content container that renders nested routes */}
       <Box sx={mainContentStyles}>
         <Outlet />
       </Box>

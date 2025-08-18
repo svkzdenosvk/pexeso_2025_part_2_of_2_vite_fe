@@ -13,6 +13,28 @@ import { useTranslation } from "react-i18next";
 // import space from '@assets/pictures/space.jpg';
 // import sea from '@assets/pictures/sea.jpg';
 
+/**
+ * Images Page Component
+ *
+ * Displays a gallery of all available Pexeso images.
+ *
+ * Responsibilities:
+ * - Fetches image names and loading state from Redux store.
+ * - Shows loading text while images are being fetched.
+ * - Renders a grid of clickable images, each linking to its detail page.
+ * - Provides hover effects and styling for visual feedback.
+ *
+ * @component
+ * @example
+ * <Images />
+ *
+ * @dependencies
+ * - react-redux (useSelector for game state)
+ * - react-router-dom (Link, useParams for navigation & localization)
+ * - react-i18next (useTranslation for i18n support)
+ * - @mui/material (Box, Typography, Button)
+ */
+
 // ---------- sx styles
 
 const imgContentStyles = {
@@ -59,37 +81,39 @@ const imgStyles = {
   },
 } as const;
 
-// ---------- component
+// ---------- Component
 
 const Images = () => {
   const { t } = useTranslation();
   const { lang } = useParams();
 
+  // Extract loading state and image names from Redux
   const { isLoading, imgNames } = useSelector((state: RootState) => state.game); //-------------with destructuring
 
   return (
     <Box sx={imgContentStyles}>
+      {/* Page headline */}
       <Typography variant="h2" component="h2">
         {t("images_page.h2")}
       </Typography>
 
       <Box sx={imgMainContentStyles}>
+        {/* Show loading state or images */}
         {isLoading || imgNames.length === 0 ? (
           <Typography variant="h4" component="h4">
             {t("images_page.loading")}
           </Typography>
         ) : (
-          // after loading show images
           imgNames.map((oneImgName) => (
             <Box key={oneImgName}>
-              {/* link from img */}
+              {/* Each image wrapped in a link to its detail page */}
               <Button
                 component={Link}
                 to={`/${lang}/about-game/images/${oneImgName}`}
                 variant="contained"
                 sx={btnLinkStyles}
               >
-                {/* img */}
+                {/* Render image preview */}
                 <Box
                   component="img"
                   src={`/pictures/pexeso/${oneImgName}.jpg`}

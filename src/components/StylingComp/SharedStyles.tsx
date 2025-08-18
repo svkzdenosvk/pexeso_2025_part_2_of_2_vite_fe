@@ -1,4 +1,24 @@
-//pulse button
+/**
+ * Shared UI Styles
+ *
+ * This file contains reusable style objects and animations for the application,
+ * including button effects, navigation link styles, and theme typography.
+ *
+ * Sections:
+ * 1. **Pulse Button Styles** → Animated button shadow effect for emphasis.
+ * 2. **Navigation Link Styles** → Consistent hover and transition effects for nav links.
+ * 3. **Shared Theme Styles** → Typography styles for headings across the app.
+ *
+ * @dependencies
+ * - `@mui/system` → Used for defining CSS keyframes and style objects.
+ *
+ * @example
+ * // Apply pulse button style to a MUI Button
+ * <Button sx={pulsatingButtonStyles}>Play</Button>
+ */
+
+//---------------------------------------------------------------------------------
+// Pulse Button Animation
 import { keyframes } from "@mui/system";
 
 export const pulseShadow = keyframes`
@@ -7,6 +27,7 @@ export const pulseShadow = keyframes`
   100% { box-shadow: 0 2px 0px white; }
 `;
 
+// Style object for a pulsating button
 export const pulsatingButtonStyles = {
   mx: "auto",
   textAlign: "center",
@@ -28,8 +49,8 @@ export const pulsatingButtonStyles = {
   },
 };
 
-//-----------------------------------------------------------------------------------------
-//navLinks
+//---------------------------------------------------------------------------------
+// Navigation Link Styles
 export const sharedNavLinkStyles = {
   textAlign: "center",
   padding: "20px",
@@ -54,7 +75,8 @@ export const sharedNavLinkStyles = {
   },
 } as const;
 
-//--------------------------shared styles in themes
+//---------------------------------------------------------------------------------
+// Shared Typography Styles in Theme
 export const sharedThemeStyles = {
   typography: {
     h1: {

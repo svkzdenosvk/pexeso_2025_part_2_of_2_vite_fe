@@ -7,17 +7,43 @@ import type { Theme } from "@mui/material/styles";
 import {
   my_Type_Guard_function,
   my_Type_Guard_function_number,
-  _myFormatSeconds,
+  _myFormatSeconds, createCardsArray
 } from "@pexeso/_inc/_inc_functions";
-import { createDivsArrayFromImgNamesAndCountImg } from "@pexeso/_inc/data";
-import { after_settings_selected_img_count } from "@pexeso/lib/redux/store/reducers/gameSlice";
+import { create_cards_arr } from "@pexeso/lib/redux/store/reducers/gameSlice";
 import type { RootState } from "@pexeso/lib/redux/store/store";
-import type { My_Type_DivImg } from "@pexeso/_inc/my_types";
-import { GameDivPictures } from "./GameDivPictures";
+import type { My_Type_Card_Obj } from "@pexeso/_inc/my_types";
+import { PlayBoard } from "../PlayBoard";
 import { TimeAndStart } from "../TimeAndStart";
 
-// ---------- sx styles
+/**
+ * Game Component
+ *
+ * Main game screen component.
+ * Handles game initialization, validation of settings, and rendering of
+ * the game interface (including the play board, timer, and control buttons).
+ *
+ * Features:
+ * - Validates selected game settings (level, image count) before starting.
+ * - Generates game card data from image names and count.
+ * - Displays congratulatory message when the game ends.
+ * - Shows start button, timer, and play board dynamically based on game state.
+ *
+ * @component
+ * @dependencies
+ * - Redux (state management)
+ * - MUI (UI components & styling)
+ * - react-i18next (translations)
+ * - Internal utilities (type guards, data generation functions)
+ *
+ * @route /game
+ *
+ * @example
+ * <Game />
+ */
 
+// ---------- Sx styles
+
+// Button style for navigation back to settings
 const gameLinkButtonStyles = {
   backgroundColor: "grey",
   maxWidth: "300px",
@@ -43,6 +69,7 @@ const gameLinkButtonStyles = {
   },
 } as const;
 
+// Main welcome/start container styles
 const welcomeStyles = {
   width: "100%",
   height: "100%",
@@ -58,31 +85,32 @@ const welcomeStyles = {
   },
 } as const;
 
+// Styles for the column containing play board content
 const columnContentStyles = {
   maxWidth: "850px",
   flexDirection: "column",
   justifyContent: "space-evenly",
 } as const;
 
-// ---------- component
+// ---------- Component
 
 export const Game = () => {
   const { t } = useTranslation();
   const { lang } = useParams();
 
-  // ---------------------------redux
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // Get game state from Redux
   const seconds = useSelector((state: RootState) => state.time.seconds);
 
   const { imgNames, level, selectedImgCount, linkName, isRunning, isEnd } =
-    useSelector((state: RootState) => state.game); //-------------with destructuring
+    useSelector((state: RootState) => state.game);
 
-  /*-------------------------------------------------------------------------------------------- */
-  //dynamic styles
+  // --------------------------- Dynamic styles
   const afterStartStyles = isRunning && !isEnd;
 
+  // Play board is only visible after game starts
   const dynamicColumnContentStyles = {
     ...columnContentStyles,
     display: afterStartStyles ? "flex" : "none",
@@ -94,7 +122,12 @@ export const Game = () => {
   });
   /*-------------------------------------------------------------------------------------------- */
 
-  //if level or img count is not valid -> redirect back
+  /**
+   * On component mount:
+   * 1. Validate game settings (level + image count)
+   * 2. If invalid → redirect to /${lang}/settings
+   * 3. If valid → create shuffled card array & store in Redux
+   */
   useEffect(() => {
     if (
       !my_Type_Guard_function(level, ["easy", "medium", "hard"]) ||
@@ -104,35 +137,28 @@ export const Game = () => {
 
       return;
     } else {
-      //create array of objects (div > img) to play from img names and img count
-      const createFinalArrayFroGame = async () => {
-        try {
-          const imgDivs: My_Type_DivImg[] =
-            await createDivsArrayFromImgNamesAndCountImg(
-              selectedImgCount,
-              imgNames
-            );
+      // Create array of cards [objects (div > img)] to play from img names and img count
+      const cards: My_Type_Card_Obj[] = createCardsArray(
+        selectedImgCount,
+        imgNames
+      );
 
-          dispatch(after_settings_selected_img_count(imgDivs));
-        } catch (error) {
-          console.error("Error fetching items:", error);
-        }
-      };
-
-      createFinalArrayFroGame(); //-------------------------------------------------to call async f.
+      // Store cards in redux
+      dispatch(create_cards_arr(cards));
     }
   }, [level, selectedImgCount, navigate, dispatch, imgNames, lang]);
 
   return (
     <>
+      {/* Main game container */}
       <Box className="welcome" sx={welcomeStyles}>
-        {/* if end -> congratulation */}
+        {/* Congratulation message when game ends */}
         {isEnd && (
           <Typography variant="h1" sx={{ marginBottom: "70px" }}>
             {t("game_page.congratulations")} {_myFormatSeconds(seconds)}
           </Typography>
         )}
-        {/* button to settings form */}
+        {/* Button to go back to /${lang}/settings */}
         <Button
           component={Link}
           to={`/${lang}/settings`}
@@ -142,18 +168,22 @@ export const Game = () => {
           {t(linkName)}
         </Button>
 
+        {/* Game instructions (hidden during gameplay) */}
         <Typography variant="h5" component="h5" sx={colorTextThemeStyles}>
           {t("game_page.h5")}
         </Typography>
 
+        {/* Timer and Start button component */}
         <TimeAndStart />
       </Box>
+
+      {/* Game board: appears only when game is running */}
       <Box
         className="column_content"
         id="content"
         sx={dynamicColumnContentStyles}
       >
-        <GameDivPictures />
+        <PlayBoard />
       </Box>
     </>
   );

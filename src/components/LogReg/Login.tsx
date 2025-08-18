@@ -19,49 +19,85 @@ import { setUser } from "@pexeso/lib/redux/store/reducers/authSlice";
 import { auth, projectUsers } from "@pexeso/lib/firebase/firestoreConfigUsers";
 import PublicOnlyRoute from "./PublicOnlyRoute";
 
+/**
+ * Login Component
+ *
+ * Provides a login form for existing users.
+ *
+ * Responsibilities:
+ * - Renders form fields: email, password
+ * - Handles user login via Firebase Authentication
+ * - Retrieves user profile from Firestore
+ * - Stores user in Redux store upon successful login
+ * - Displays success messages (e.g., after registration) and error messages
+ * - Manages loading state and password visibility toggle
+ *
+ * Notes:
+ * - Wrapped with PublicOnlyRoute to prevent logged-in users from accessing it
+ * - Uses translation keys for all labels and error messages
+ *
+ * @component
+ * @dependencies
+ * - React & React Router: react, react-router-dom
+ * - State & i18n: react-redux, react-i18next
+ * - UI components: @mui/material, @mui/icons-material
+ * - Firebase: firebase/auth, firebase/firestore
+ * - Redux slice: setUser
+ * - PublicOnlyRoute wrapper
+ *
+ * @example
+ * <Login />
+ */
+
+// ---------- Sx styles
+
 const sxStyles = {
   input: { mb: 2, width: "100%" },
   form: { maxWidth: 400, mx: "auto", mt: 4 },
 };
 
-// ---------- component
+// ---------- Component
 
 export const Login = () => {
   const { t } = useTranslation();
-  const [isLoading, setIsLoading] = useState(false);
-  const location = useLocation(); // when U navigate with state, then on new page U can get state with useLocation
-  const [form, setForm] = useState({ email: "", password: "" });
-  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // loading state during login
+  const location = useLocation(); // get current location (for redirect state)
+  const [form, setForm] = useState({ email: "", password: "" }); // form state
+  const [showPassword, setShowPassword] = useState(false); // toggle password visibility
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { lang } = useParams();
-  const [showSuccess, setShowSuccess] = useState(false);
+  const { lang } = useParams(); // get lang param from route
+  const [showSuccess, setShowSuccess] = useState(false); // show success message (e.g., after register)
 
-  //show successfull message from register
+  // ---------- Effect: Show success message after registration
   useEffect(() => {
     if (location.state?.fromRegister) {
       setShowSuccess(true);
 
-      // delete state (flag) from history, alert not exists after refresh
+      // Remove state (flag) from history to prevent showing alert after refresh
       navigate(location.pathname, { replace: true });
     }
   }, [location, navigate]);
 
+  // ---------- Function: Handle login
   const handleLogin = async () => {
-    setIsLoading(true);
-    setError("");
+    setIsLoading(true); // start loading
+    setError(""); // clear previous errors
 
     try {
+      // Firebase authentication
       const res = await signInWithEmailAndPassword(
         auth,
         form.email,
         form.password
       );
+
+      // Fetch user profile from Firestore
       const docSnap = await getDoc(doc(projectUsers, "users", res.user.uid));
       const data = docSnap.data();
 
-      //setup user in redux
+      // Store user in Redux
       dispatch(
         setUser({
           uid: res.user.uid,
@@ -70,10 +106,12 @@ export const Login = () => {
         })
       );
 
-      // setError("");
+      // Navigate to home page after successful login
       navigate(`/${lang}/`);
     } catch (e) {
       const err = e as FirebaseError;
+
+      // Map Firebase error codes to translation keys
       switch (err.code) {
         case "auth/invalid-credential":
         case "auth/invalid-credentials":
@@ -89,25 +127,30 @@ export const Login = () => {
           setError("login_page.error_alert.unknow_err");
       }
     } finally {
-      setIsLoading(false);
+      setIsLoading(false); // stop loading
     }
   };
 
   return (
     <PublicOnlyRoute>
       <Box sx={{ mx: "auto" }}>
+        {/* Success alert */}
         {showSuccess && (
           <Alert severity="success" sx={{ mb: 2 }}>
             {t("login_page.success_login")}
           </Alert>
         )}
+        {/* Login form */}
         <Box sx={sxStyles.form}>
+          {/* Email input */}
           <TextField
             label={t("reg_page.label.email")}
             sx={sxStyles.input}
             value={form.email}
             onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
           />
+
+          {/* Password input with visibility toggle */}
           <TextField
             label={t("reg_page.label.pass_conf")}
             type={showPassword ? "text" : "password"}
@@ -130,11 +173,13 @@ export const Login = () => {
               ),
             }}
           />
+          {/* Error alert */}
           {error && (
             <Alert severity="error" sx={{ mb: 2 }}>
               {t(error)}
             </Alert>
           )}
+          {/* Submit button */}
           <Button
             sx={{ px: 1, py: 2, fontWeight: "bold" }}
             variant="contained"

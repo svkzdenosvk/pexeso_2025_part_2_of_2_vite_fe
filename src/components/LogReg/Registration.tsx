@@ -21,30 +21,74 @@ import {
 import { auth, projectUsers } from "@pexeso/lib/firebase/firestoreConfigUsers";
 import PublicOnlyRoute from "./PublicOnlyRoute";
 
+/**
+ * Registration Component
+ *
+ * Provides a registration form for creating a new user account.
+ *
+ * Responsibilities:
+ * - Renders form fields: name, email, password, confirm password
+ * - Validates user input (length, format, password strength, match)
+ * - Checks for existing email in Firebase Authentication
+ * - Creates user in Firebase Authentication and stores profile in Firestore
+ * - Logs the user out after registration and redirects to the login page
+ * - Displays errors and loading states
+ *
+ * Notes:
+ * - Wrapped with PublicOnlyRoute to prevent logged-in users from accessing it
+ * - Password visibility toggle included for better UX
+ * - Uses translation keys for all labels and error messages
+ *
+ * @component
+ * @dependencies
+ * - react-router-dom (useNavigate, useParams)
+ * - react-i18next (useTranslation)
+ * - @mui/material (TextField, Button, Alert, Box, IconButton, InputAdornment, CircularProgress)
+ * - @mui/icons-material (Visibility, VisibilityOff)
+ * - firebase/auth (fetchSignInMethodsForEmail, createUserWithEmailAndPassword, signOut)
+ * - firebase/firestore (doc, setDoc, serverTimestamp)
+ * - Firebase config (auth, projectUsers)
+ * - PublicOnlyRoute (wrapper for public-only access)
+ *
+ * @example
+ * <Registration />
+ */
+
+// ---------- Sx styles
+
 const sxStyles = {
   input: { mb: 2, width: "100%" },
   form: { maxWidth: 400, mx: "auto", mt: 4 },
 };
-
-// ---------- component
+// ---------- Component
 
 export const Registration = () => {
+  // Local loading state to disable submit button & show spinner
   const [isLoading, setIsLoading] = useState(false);
 
   const { t } = useTranslation();
+
+  // Navigation & route language param
   const navigate = useNavigate();
   const { lang } = useParams();
 
+  // Form state (controlled inputs)
   const [form, setForm] = useState({
     name: "",
     email: "",
     password: "",
     confirm: "",
   });
+
+  // Error message (translation key)
   const [error, setError] = useState("");
+  // Toggles password visibility
   const [showPassword, setShowPassword] = useState(false);
 
-  // function to validate form and return error
+  /**
+   * Validates registration form values.
+   * @returns string - translation key for error message, or empty string if valid
+   */
   const validate = () => {
     const { password, confirm, name, email } = form;
     if (name.length < 3) return "reg_page.error_alert.name_length_min";
@@ -60,28 +104,35 @@ export const Registration = () => {
     return "";
   };
 
+  /**
+   * Handles registration process:
+   * 1. Validates input
+   * 2. Checks if email is already registered
+   * 3. Creates Firebase Auth user
+   * 4. Saves profile in Firestore
+   * 5. Signs out and redirects to login
+   */
   const handleRegister = async () => {
-    //prevent double click on register btn and trigger error email already registered
-    setIsLoading(true);
+    setIsLoading(true); // prevent double click on register btn and trigger error email already registered
     setError(""); // reset error
 
-    //error from validate function
+    // Client-side validation - error from validate function
     const validationError = validate();
     if (validationError) {
       setError(validationError);
-      // if error set loading to false -> prevent never ending disabled reg. button
+      // stop loading if validation fails  -> prevent never ending disabled reg. button
       setIsLoading(false);
       return;
     }
 
     try {
-      //check whether email exists in Auth (Authentication in Firebase console)
+      // Check if email already exists in Firebase Auth (Authentication in Firebase console)
       const methods = await fetchSignInMethodsForEmail(auth, form.email);
       if (methods.length > 0) {
         return setError("reg_page.error_alert.email_registered");
       }
 
-      // create user in Auth (Authentication in Firebase console)
+      // Create user in Firebase Auth (Authentication in Firebase console)
       const res = await createUserWithEmailAndPassword(
         auth,
         form.email,
@@ -90,14 +141,14 @@ export const Registration = () => {
       const newUser = res.user;
 
       try {
-        //save in Firestore
+        // Save user profile in Firestore
         await setDoc(doc(projectUsers, "users", newUser.uid), {
           name: form.name,
           email: form.email,
           createdAt: serverTimestamp(),
         });
 
-        //logg out and redirect
+        // Sign out and redirect to login
         await signOut(auth);
         setError("");
         setForm({ name: "", email: "", password: "", confirm: "" });
@@ -105,7 +156,7 @@ export const Registration = () => {
       } catch (firestoreError) {
         console.error("User not saved in Firestore:", firestoreError);
 
-        //if Firestore save failed, delete user from Auth
+        // If Firestore save failed, remove user from Auth
         try {
           await newUser.delete();
           console.log(
@@ -118,6 +169,7 @@ export const Registration = () => {
         setError("reg_page.error_alert.reg_failed");
       }
     } catch (e) {
+      // Handle Firebase Auth errors
       const err = e as FirebaseError;
       console.error("Firebase Error:", err.code, err.message);
       if (err.code === "auth/email-already-in-use") {
@@ -126,24 +178,26 @@ export const Registration = () => {
         setError("reg_page.error_alert.unexpected");
       }
     } finally {
-      setIsLoading(false);
+      setIsLoading(false); // Always stop loading
     }
   };
 
   return (
     <PublicOnlyRoute>
       <Box sx={sxStyles.form}>
+        {/* Name input */}
         <TextField
           label={t("reg_page.label.name")}
           sx={sxStyles.input}
           onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
         />
+        {/* Email input */}
         <TextField
           label={t("reg_page.label.email")}
           sx={sxStyles.input}
           onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
         />
-
+        {/* Password input with visibility toggle */}
         <TextField
           label={t("reg_page.label.pass")}
           type={showPassword ? "text" : "password"}
@@ -165,18 +219,20 @@ export const Registration = () => {
             },
           }}
         />
-
+        {/* Confirm password input */}
         <TextField
           label={t("reg_page.label.pass_conf")}
           type="password"
           sx={sxStyles.input}
           onChange={(e) => setForm((f) => ({ ...f, confirm: e.target.value }))}
         />
+        {/* Error alert */}
         {error && (
           <Alert severity="error" sx={{ mb: 2 }}>
             {t(error)}
           </Alert>
         )}
+        {/* Submit button with spinner */}
         <Button
           sx={{ px: 1, py: 2, fontWeight: "bold" }}
           variant="contained"

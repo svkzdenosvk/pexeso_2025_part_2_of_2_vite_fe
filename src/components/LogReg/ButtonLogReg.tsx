@@ -7,6 +7,35 @@ import { clearUser } from "@pexeso/lib/redux/store/reducers/authSlice";
 import { signOut } from "firebase/auth";
 import { auth } from "@pexeso/lib/firebase/firestoreConfigUsers";
 
+/**
+ * ButtonLogReg Component
+ *
+ * Renders login/registration buttons for guests
+ * or a logout button for authenticated users.
+ *
+ * Responsibilities:
+ * - Display logged-in user's name (if available)
+ * - Provide navigation to login & registration pages
+ * - Handle Firebase sign-out and clear Redux user state
+ *
+ * Notes:
+ * - Language is derived from route params
+ * - Uses translation keys for button labels
+ *
+ * @component
+ * @dependencies
+ * - React Router: useParams, Link
+ * - State & i18n: react-redux, react-i18next
+ * - UI components: @mui/material
+ * - Firebase: firebase/auth
+ * - Redux slice: clearUser
+ *
+ * @example
+ * <ButtonLogReg />
+ */
+
+// ---------- Sx styles
+
 const styles = {
   wrapper: {
     display: "flex",
@@ -24,27 +53,29 @@ const styles = {
   },
 };
 
-// ---------- component
+// ---------- Component
 
 export const ButtonLogReg = () => {
-  const { lang } = useParams();
+  const { lang } = useParams(); // get current language from URL
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
-  const { user } = useSelector((state: RootState) => state.auth);
+  const { user } = useSelector((state: RootState) => state.auth); // get user from Redux
 
+  // ---------- Function: Logout handler
   const handleLogout = async () => {
-    await signOut(auth);
-    dispatch(clearUser());
+    await signOut(auth); // Firebase sign out
+    dispatch(clearUser()); // clear user in Redux
   };
 
   return (
     <Box sx={styles.wrapper}>
       <Typography variant="body1">
-        {/* {user?.name ? `Prihlásený: ${user.name}` : "Hosť"} */}
-        {user?.name && user.name}	
+        {/* Show username if logged in */}
+        {user?.name && user.name}
       </Typography>
 
+      {/* If user is not logged in -> show Register + Login buttons */}
       {!user?.uid ? (
         <>
           <Button
@@ -65,13 +96,14 @@ export const ButtonLogReg = () => {
           </Button>
         </>
       ) : (
+        
+        // If logged in -> show Logout button
         <Button
           variant="contained"
           sx={styles.linkButton}
           onClick={handleLogout}
         >
-       
-          {t("reg_log_btn.log_out")} 
+          {t("reg_log_btn.log_out")}
         </Button>
       )}
     </Box>

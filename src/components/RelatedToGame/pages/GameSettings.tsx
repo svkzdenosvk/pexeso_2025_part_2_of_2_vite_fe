@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useNavigate, useLocation,useParams } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import {
   Box,
@@ -30,13 +30,36 @@ import {
 } from "@pexeso/_inc/_inc_functions";
 import { pulsatingButtonStyles } from "@pexeso/components/StylingComp/SharedStyles";
 
-// ---------- sx styles
+/**
+ * GameSettings Component
+ *
+ * Allows the player to choose:
+ * - Difficulty level (easy, medium, hard)
+ * - Number of image pairs
+ *
+ * Features:
+ * - Validates user selections before starting the game
+ * - Resets previous game state on page load
+ * - Navigates to the game page after settings are saved
+ *
+ * @dependencies
+ * - React (hooks, form handling)
+ * - React Router (navigation & params)
+ * - Redux (state management)
+ * - MUI (UI components & styling)
+ * - react-i18next (translations)
+ */
 
+// ---------- Sx styles
+
+// Style for the form container
 const formStyles = {
   textAlign: "center",
   mx: "auto",
   mt: 2,
 };
+
+// Style for each fieldset (group of radio buttons)
 const fieldsetStyles = {
   display: "flex",
   flexDirection: "column",
@@ -44,6 +67,7 @@ const fieldsetStyles = {
   textAlign: "center",
 };
 
+// Style for the alert
 const alertStyles = {
   borderRadius: "25px",
   padding: "15px 25px",
@@ -56,50 +80,57 @@ const alertStyles = {
   },
 };
 
-// ---------- component
+// ---------- Component
 
 const GameSettings = () => {
   const { t } = useTranslation();
-  const { lang } = useParams();
+  const { lang } = useParams(); // get language from URL
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const formRef = useRef<HTMLFormElement>(null);
+  const formRef = useRef<HTMLFormElement>(null); // ref to form for reset
 
+  // Local state for chosen level, image count, and errors
   const [levelChosen, setLevelChosen] = useState("" as My_Type_Level);
   const [imgCountChosen, setImgCountChosen] = useState(0 as My_Type_ImgCount);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(""); // error key for i18n translation
 
-  //reset seconds and other settings
+  // Reset seconds and other settings
   useEffect(() => {
-    dispatch(seconds_reset());
-    dispatch(reset_settings());
+    dispatch(seconds_reset()); // reset game timer
+    dispatch(reset_settings()); // reset game configuration
   }, [location.pathname, dispatch]);
 
+  // Possible image count options
   const imgCountValues: My_Type_ImgCount[] = [5, 6, 7, 8];
+
+  // Possible game levels (labels are translated)
   const levels: My_Type_Svk_Eng_level[] = [
     { value: "easy", label: t("settings_page.level.easy") },
     { value: "medium", label: t("settings_page.level.medium") },
     { value: "hard", label: t("settings_page.level.hard") },
   ];
+
+  // Level values for validation
   const levelValues: My_Type_Level[] = ["easy", "medium", "hard"];
 
+  // Handle form submission
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    //alert - level was NOT set
+    // Validate – check if a level was chosen
     if (!my_Type_Guard_function(levelChosen, levelValues)) {
       setError("settings_page.error_alert.level");
       return;
     }
-    //alert - img count was NOT set
+    // Validate – check if an image count was chosen
     if (!my_Type_Guard_function_number(imgCountChosen, imgCountValues)) {
       setError("settings_page.error_alert.img_count");
       return;
     }
 
-    //if not error -> set level and img count and styling based on them
+    // If valid – save settings to Redux
     setError("");
     dispatch(
       settings_and_styling_before_start({
@@ -108,17 +139,20 @@ const GameSettings = () => {
       })
     );
 
+    // Reset form and navigate to game page
     formRef.current?.reset();
-    navigate( `/${lang}/game `);
+    navigate(`/${lang}/game `);
   };
 
   return (
     <Box component="form" ref={formRef} onSubmit={handleSubmit} sx={formStyles}>
+    
+      {/* Title */}
       <Typography variant="h5" component="h5" sx={{ mb: 2 }}>
         {t("settings_page.h5")}
       </Typography>
 
-      {/*form to choose level */}
+      {/* Level selection */}
       <FormControl sx={fieldsetStyles}>
         {" "}
         <FormLabel component="legend">
@@ -141,7 +175,7 @@ const GameSettings = () => {
         </RadioGroup>
       </FormControl>
 
-      {/*form to choose img count */}
+      {/* Image count selection */}
       <FormControl sx={fieldsetStyles}>
         {" "}
         <FormLabel component="legend">
@@ -159,20 +193,20 @@ const GameSettings = () => {
               key={i}
               value={cnt.toString()}
               control={<Radio />}
-              label={`${cnt * 2}`} /* *2 -> pair of images */
+              label={`${cnt * 2}`} // multiply by 2 because images come in pairs
             />
           ))}
         </RadioGroup>
       </FormControl>
 
-      {/*show error alerts if exist */}
+      {/* Show error message if present */}
       {error && (
         <Alert severity="error" sx={alertStyles}>
           {t(error)}
         </Alert>
       )}
 
-      {/*submit button*/}
+      {/* Submit button */}
       <Button sx={pulsatingButtonStyles} type="submit">
         {t("settings_page.btn_play")}
       </Button>
