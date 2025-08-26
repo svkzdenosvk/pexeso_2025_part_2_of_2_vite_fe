@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import {
@@ -12,13 +12,15 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import CircularProgress from "@mui/material/CircularProgress";
-import { FirebaseError } from "firebase/app";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
-import { reset_settings } from "@pexeso/lib/redux/store/reducers/gameSlice";
-import { setUser } from "@pexeso/lib/redux/store/reducers/authSlice";
-import { auth, projectUsers } from "@pexeso/lib/firebase/firestoreConfigUsers";
-import PublicOnlyRoute from "./PublicOnlyRoute";
+import { useResetSettings } from "@pexeso/_inc/hooks/UseResetSettings";
+import { useRegistrationSuccess } from "@pexeso/_inc/hooks/UseRegistrationSuccess";
+import { handleLogin } from "@pexeso/_inc/functions/login_related"; 
+import  {
+my_Type_Guard_function_isValidLang } from "@pexeso/_inc/functions/general"
+import PublicOnlyRoute from "../PublicOnlyRoute";
+import type {
+  My_Type_Lang,
+} from  "@pexeso/_inc/my_types";
 
 /**
  * Login Component
@@ -27,11 +29,11 @@ import PublicOnlyRoute from "./PublicOnlyRoute";
  *
  * Responsibilities:
  * - Renders form fields: email, password
- * - Handles user login via Firebase Authentication
- * - Retrieves user profile from Firestore
- * - Stores user in Redux store upon successful login
+ * - Calls `handleLogin` helper to perform login
+ *   (Firebase authentication, Firestore user fetch, Redux user storage)
  * - Displays success messages (e.g., after registration) and error messages
- * - Manages loading state and password visibility toggle
+ * - Manages local UI state (form values, loading state, password visibility)
+ * - Validates and falls back the language param using a type guard
  *
  * Notes:
  * - Wrapped with PublicOnlyRoute to prevent logged-in users from accessing it
@@ -42,9 +44,9 @@ import PublicOnlyRoute from "./PublicOnlyRoute";
  * - React & React Router: react, react-router-dom
  * - State & i18n: react-redux, react-i18next
  * - UI components: @mui/material, @mui/icons-material
- * - Firebase: firebase/auth, firebase/firestore
- * - Redux slice: setUser
- * - PublicOnlyRoute wrapper
+ * - Helper: handleLogin (auth + firestore logic)
+ * - Custom hooks: useResetSettings, useRegistrationSuccess
+ * - Type guard: my_Type_Guard_function_isValidLang
  *
  * @example
  * <Login />
@@ -62,79 +64,33 @@ const sxStyles = {
 export const Login = () => {
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false); // loading state during login
-  const location = useLocation(); // get current location (for redirect state)
   const [form, setForm] = useState({ email: "", password: "" }); // form state
   const [showPassword, setShowPassword] = useState(false); // toggle password visibility
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { lang } = useParams(); // get lang param from route
-  const [showSuccess, setShowSuccess] = useState(false); // show success message (e.g., after register)
+const { lang } = useParams<{ lang?: string }>(); // get lang param from route
+const safeLang: My_Type_Lang = my_Type_Guard_function_isValidLang(lang)
+  ? lang
+  : "en"; // fallback
+  
+  // Reset settings from the game by own hook
+  useResetSettings();
 
-  // Reset settings from the game
-  useEffect(() => {
-    dispatch(reset_settings()); // reset game configuration
-  }, [location.pathname, dispatch]);
+  // Effect: Show success message after registration
+  const showSuccess = useRegistrationSuccess();
 
-  // ---------- Effect: Show success message after registration
-  useEffect(() => {
-    if (location.state?.fromRegister) {
-      setShowSuccess(true);
-
-      // Remove state (flag) from history to prevent showing alert after refresh
-      navigate(location.pathname, { replace: true });
-    }
-  }, [location, navigate]);
-
-  // ---------- Function: Handle login
-  const handleLogin = async () => {
-    setIsLoading(true); // start loading
-    setError(""); // clear previous errors
-
-    try {
-      // Firebase authentication
-      const res = await signInWithEmailAndPassword(
-        auth,
-        form.email,
-        form.password
-      );
-
-      // Fetch user profile from Firestore
-      const docSnap = await getDoc(doc(projectUsers, "users", res.user.uid));
-      const data = docSnap.data();
-
-      // Store user in Redux
-      dispatch(
-        setUser({
-          uid: res.user.uid,
-          name: data?.name ?? "",
-          email: res.user.email ?? "",
-        })
-      );
-
-      // Navigate to home page after successful login
-      navigate(`/${lang}/`);
-    } catch (e) {
-      const err = e as FirebaseError;
-
-      // Map Firebase error codes to translation keys
-      switch (err.code) {
-        case "auth/invalid-credential":
-        case "auth/invalid-credentials":
-          setError("login_page.error_alert.invalid_credentials");
-          break;
-        case "auth/too-many-requests":
-          setError("login_page.error_alert.too_many_req");
-          break;
-        case "auth/network-request-failed":
-          setError("login_page.error_alert.net_req_failed");
-          break;
-        default:
-          setError("login_page.error_alert.unknow_err");
-      }
-    } finally {
-      setIsLoading(false); // stop loading
-    }
+  // Function: Handle login
+ const onLogin = () => {
+    handleLogin({
+      email: form.email,
+      password: form.password,
+      lang: safeLang,
+      dispatch,
+      navigate,
+      setError,
+      setIsLoading
+    });
   };
 
   return (
@@ -190,7 +146,8 @@ export const Login = () => {
             sx={{ px: 1, py: 2, fontWeight: "bold" }}
             variant="contained"
             fullWidth
-            onClick={handleLogin}
+            // onClick={handleLogin}
+            onClick={onLogin}
             disabled={isLoading}
             startIcon={isLoading && <CircularProgress size={20} />} //loading spinner
           >

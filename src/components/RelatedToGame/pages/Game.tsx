@@ -1,17 +1,11 @@
-import { useEffect } from "react";
-import { useNavigate, Link, useParams } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { Link, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { Typography, Box, Button } from "@mui/material";
 import type { Theme } from "@mui/material/styles";
-import {
-  my_Type_Guard_function,
-  my_Type_Guard_function_number,
-  _myFormatSeconds, createCardsArray
-} from "@pexeso/_inc/_inc_functions";
-import { create_cards_arr } from "@pexeso/lib/redux/store/reducers/gameSlice";
+import { _myFormatSeconds } from "@pexeso/_inc/functions/general";
+import { useGameInit } from "@pexeso/_inc/hooks/UseGameInit";
 import type { RootState } from "@pexeso/lib/redux/store/store";
-import type { My_Type_Card_Obj } from "@pexeso/_inc/my_types";
 import { PlayBoard } from "../PlayBoard";
 import { TimeAndStart } from "../TimeAndStart";
 
@@ -73,7 +67,7 @@ const gameLinkButtonStyles = {
 const welcomeStyles = {
   width: "100%",
   height: "100%",
-  m: 0,
+  mx: "auto",
   p: 0,
   boxSizing: "border-box",
   textAlign: "center",
@@ -90,6 +84,7 @@ const columnContentStyles = {
   maxWidth: "850px",
   flexDirection: "column",
   justifyContent: "space-evenly",
+  mx: "auto",
 } as const;
 
 // ---------- Component
@@ -98,14 +93,12 @@ export const Game = () => {
   const { t } = useTranslation();
   const { lang } = useParams();
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
   // Get game state from Redux
   const seconds = useSelector((state: RootState) => state.time.seconds);
 
-  const { imgNames, level, selectedImgCount, linkName, isRunning, isEnd } =
-    useSelector((state: RootState) => state.game);
+  const { linkName, isRunning, isEnd } = useSelector(
+    (state: RootState) => state.game
+  );
 
   // --------------------------- Dynamic styles
   const afterStartStyles = isRunning && !isEnd;
@@ -123,30 +116,13 @@ export const Game = () => {
   /*-------------------------------------------------------------------------------------------- */
 
   /**
+   * own hook
    * On component mount:
    * 1. Validate game settings (level + image count)
    * 2. If invalid → redirect to /${lang}/settings
    * 3. If valid → create shuffled card array & store in Redux
    */
-  useEffect(() => {
-    if (
-      !my_Type_Guard_function(level, ["easy", "medium", "hard"]) ||
-      !my_Type_Guard_function_number(selectedImgCount, [5, 6, 7, 8])
-    ) {
-      navigate(`/${lang}/settings `);
-
-      return;
-    } else {
-      // Create array of cards [objects (div > img)] to play from img names and img count
-      const cards: My_Type_Card_Obj[] = createCardsArray(
-        selectedImgCount,
-        imgNames
-      );
-
-      // Store cards in redux
-      dispatch(create_cards_arr(cards));
-    }
-  }, [level, selectedImgCount, navigate, dispatch, imgNames, lang]);
+  useGameInit();
 
   return (
     <>

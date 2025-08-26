@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import { useNavigate, useLocation, useParams } from "react-router-dom";
+import React, { useState, useRef } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import {
   Box,
@@ -14,11 +14,7 @@ import {
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-import {
-  settings_and_styling_before_start,
-  reset_settings,
-} from "@pexeso/lib/redux/store/reducers/gameSlice";
-import { seconds_reset } from "@pexeso/lib/redux/store/reducers/secondsSlice";
+import { settings_and_styling_before_start } from "@pexeso/lib/redux/store/reducers/gameSlice";
 import type {
   My_Type_ImgCount,
   My_Type_Level,
@@ -27,8 +23,9 @@ import type {
 import {
   my_Type_Guard_function,
   my_Type_Guard_function_number,
-} from "@pexeso/_inc/_inc_functions";
+} from "@pexeso/_inc/functions/general";
 import { pulsatingButtonStyles } from "@pexeso/components/StylingComp/SharedStyles";
+import { useResetSettings } from "../../../_inc/hooks/UseResetSettings";
 
 /**
  * GameSettings Component
@@ -88,7 +85,6 @@ const GameSettings = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
   const formRef = useRef<HTMLFormElement>(null); // ref to form for reset
 
   // Local state for chosen level, image count, and errors
@@ -96,11 +92,8 @@ const GameSettings = () => {
   const [imgCountChosen, setImgCountChosen] = useState(0 as My_Type_ImgCount);
   const [error, setError] = useState(""); // error key for i18n translation
 
-  // Reset seconds and other settings
-  useEffect(() => {
-    dispatch(seconds_reset()); // reset game timer
-    dispatch(reset_settings()); // reset game configuration
-  }, [location.pathname, dispatch]);
+  // Reset settings from the game by own hook
+  useResetSettings();
 
   // Possible image count options
   const imgCountValues: My_Type_ImgCount[] = [5, 6, 7, 8];
@@ -146,7 +139,6 @@ const GameSettings = () => {
 
   return (
     <Box component="form" ref={formRef} onSubmit={handleSubmit} sx={formStyles}>
-    
       {/* Title */}
       <Typography variant="h5" component="h5" sx={{ mb: 2 }}>
         {t("settings_page.h5")}

@@ -7,10 +7,11 @@ import type {
   My_Type_Theme,
 } from "@pexeso/_inc/my_types";
 import {
-  _shuffleArray,
+  _shuffleArray
+} from "@pexeso/_inc/functions/general";
+import {
   _shuffleUnMatchedCards,
-} from "@pexeso/_inc/_inc_functions";
-
+} from "@pexeso/_inc/functions/game_related";
 import { createSlice } from "@reduxjs/toolkit";
 
 /**

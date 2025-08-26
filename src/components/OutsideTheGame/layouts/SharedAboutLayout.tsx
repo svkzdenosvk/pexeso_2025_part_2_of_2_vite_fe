@@ -32,7 +32,6 @@ const sharedAboutWrapperStyles = {
   display: "flex",
   flexDirection: "row",
   width: "100%",
-  minHeight: "70vh",
   "@media (max-width:600px)": {
     flexDirection: "column", // Stack vertically on small screens
   },
@@ -43,7 +42,6 @@ const sharedAboutAsideNavigation = {
   display: "flex",
   flexDirection: "column",
   width: "30vw",
-  minHeight: "70vh",
   "@media (max-width:600px)": {
     width: "100%",
     minHeight: "auto",
@@ -74,7 +72,6 @@ const mainContentAboutStyles = {
   boxSizing: "border-box",
   display: "flex",
   flexDirection: "row",
-  minHeight: "70vh",
   width: "70vw",
   fontSize: "20px",
   "@media (max-width:600px)": {

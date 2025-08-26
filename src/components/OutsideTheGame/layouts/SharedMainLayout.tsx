@@ -27,11 +27,11 @@ import TranslateButtons from "../TranslateButtons";
 
 // ---------- Sx styles
 
-const sharedWrapperStyles = {
+const sharedMainWrapperStyles = {
   p: 0,
   m: 0,
   boxSizing: "border-box",
-  minHeight: "100vh",
+  height: "100%",
   width: "100%",
   display: "flex",
   flexDirection: "column",
@@ -39,7 +39,6 @@ const sharedWrapperStyles = {
 
 // Header container for the navigation bar
 const sharedHeaderNavigation = {
-  height: "30vh",
   display: "flex",
   flexDirection: "column",
   justifyContent: "flex-end",
@@ -82,13 +81,13 @@ const mainContentStyles = {
 
 // ---------- Component
 
-const SharedLayout = () => {
+const SharedMainLayout = () => {
   const { t } = useTranslation();
   // Language parameter from the current route
   const { lang } = useParams();
   return (
     // Wrapper for the entire layout
-    <Box sx={sharedWrapperStyles}>
+    <Box sx={sharedMainWrapperStyles}>
       {/* Language switcher */}
       <TranslateButtons />
       {/* Header navigation */}
@@ -123,4 +122,4 @@ const SharedLayout = () => {
   );
 };
 
-export default SharedLayout;
+export default SharedMainLayout;

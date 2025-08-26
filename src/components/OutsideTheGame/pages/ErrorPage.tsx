@@ -2,7 +2,7 @@ import { Typography, Box, Button } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { pulsatingButtonStyles } from "@pexeso/components/StylingComp/SharedStyles";
-import { my_Type_Guard_function_isValidLang } from "@pexeso/_inc/_inc_functions";
+import { my_Type_Guard_function_isValidLang } from "@pexeso/_inc/functions/general";
 
 /**
  * ErrorPage

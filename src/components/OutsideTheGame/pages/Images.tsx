@@ -35,8 +35,9 @@ import { useTranslation } from "react-i18next";
  * - @mui/material (Box, Typography, Button)
  */
 
-// ---------- sx styles
+// ---------- Sx styles
 
+// Wrapper for whole page layout
 const imgContentStyles = {
   display: "flex",
   flexDirection: "column",
@@ -44,6 +45,7 @@ const imgContentStyles = {
   width: "100%",
 } as const;
 
+// Grid container for all images
 const imgMainContentStyles = {
   height: "100%",
   width: "100%",
@@ -54,6 +56,7 @@ const imgMainContentStyles = {
   gap: "1%",
 };
 
+// Button wrapper styling
 const btnLinkStyles = {
   mb: 2,
   p: 0,
@@ -67,6 +70,7 @@ const btnLinkStyles = {
   },
 } as const;
 
+// Single image preview
 const imgStyles = {
   width: 200,
   height: 200,

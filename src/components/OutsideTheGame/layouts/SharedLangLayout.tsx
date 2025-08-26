@@ -1,5 +1,7 @@
-import LanguageInit from "../LanguageInit";
 import { Outlet } from "react-router-dom";
+import LanguageInit from "../LanguageInit";
+import { Box } from "@mui/material";
+
 import ButtonLogReg from "@pexeso/components/LogReg/ButtonLogReg";
 
 /**
@@ -25,10 +27,19 @@ import ButtonLogReg from "@pexeso/components/LogReg/ButtonLogReg";
  *   <Route path="about" element={<AboutPage />} />
  * </Route>
  */
+const sharedLangWrapperStyles = {
+  p: 0,
+  m: 0,
+  boxSizing: "border-box",
+  width: "100%",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+} as const;
 
 const SharedLangLayout = () => {
   return (
-    <>
+    <Box sx={sharedLangWrapperStyles}>
       {/* Initializes language settings*/}
       <LanguageInit />
 
@@ -37,7 +48,7 @@ const SharedLangLayout = () => {
 
       {/* Nested routes will be rendered here */}
       <Outlet />
-    </>
+    </Box>
   );
 };
 

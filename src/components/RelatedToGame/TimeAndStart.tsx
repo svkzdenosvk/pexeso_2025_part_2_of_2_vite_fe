@@ -1,11 +1,10 @@
-import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { Button, Box } from "@mui/material";
 import type { Theme } from "@mui/material/styles";
 import type { RootState } from "@pexeso/lib/redux/store/store";
-import { seconds_counter } from "@pexeso/lib/redux/store/reducers/secondsSlice";
 import { set_start_game } from "@pexeso/lib/redux/store/reducers/gameSlice";
+import { useGameTimer } from "@pexeso/_inc/hooks/UseGameTimer";
 
 /**
  * TimeAndStart Component
@@ -54,9 +53,7 @@ export const TimeAndStart = () => {
 
   // --------------------------- Redux state
   const seconds = useSelector((state: RootState) => state.time.seconds);
-  const { isRunning, isLoading, isEnd } = useSelector(
-    (state: RootState) => state.game
-  ); // destructure game state
+  const { isRunning, isEnd } = useSelector((state: RootState) => state.game); // destructure game state
   const dispatch = useDispatch();
 
   // --------------------------- Dynamic styles
@@ -75,16 +72,8 @@ export const TimeAndStart = () => {
     display: isEnd ? "none" : "block", // hide seconds if game ended
   });
 
-  // --------------------------- Seconds counter logic
-  useEffect(() => {
-    if (!isRunning || isLoading || isEnd) return;
-
-    const interval = setInterval(() => {
-      dispatch(seconds_counter()); // increment seconds every 1s
-    }, 1000);
-
-    return () => clearInterval(interval); // cleanup interval on unmount or dependencies change
-  }, [isRunning, dispatch, isLoading, isEnd]);
+  // --------------------------- Seconds counter logic in own hook
+  useGameTimer();
 
   // --------------------------- Start button click handler
   const handleStartClick = () => {

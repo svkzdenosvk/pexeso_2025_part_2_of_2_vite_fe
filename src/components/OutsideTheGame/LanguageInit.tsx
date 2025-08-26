@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { LANGUAGE_CONFIG } from "@pexeso/lib/i18n/i18n_MySettings";
-import { my_Type_Guard_function_isValidLang } from "@pexeso/_inc/_inc_functions";
+import { my_Type_Guard_function_isValidLang } from "@pexeso/_inc/functions/general";
 
 /**
  * LanguageInit Component

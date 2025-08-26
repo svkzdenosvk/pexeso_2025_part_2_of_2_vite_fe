@@ -143,3 +143,39 @@ export type My_Type_User = {
 export type My_Type_AuthState = {
   user: My_Type_User | null;
 };
+
+// -------------------- Login Types --------------------
+
+import type { AppDispatch } from "@pexeso/lib/redux/store/store";
+
+/**
+ * Parameters for handleLogin helper
+ */
+export type My_Type_LoginParams = {
+  email: string;
+  password: string;
+  lang: My_Type_Lang; // validated language code
+  dispatch: AppDispatch; // redux dispatch
+  navigate: (path: string) => void; // navigation callback
+  setError: (error: string) => void; // state setter for error messages
+  setIsLoading: (loading: boolean) => void;  // state setter for loading
+}
+
+// -------------------- Register Types --------------------
+import type { NavigateOptions } from "react-router-dom";
+
+export type My_Type_RegistrationForm = {
+  name: string;
+  email: string;
+  password: string;
+  confirm: string;
+}
+
+export type My_Type_RegisterParams = {
+  form: My_Type_RegistrationForm;
+  lang: My_Type_Lang;
+  navigate: (path: string, options?: NavigateOptions) => void;
+  setError: (error: string) => void;
+  setIsLoading: (loading: boolean) => void;
+  resetForm: () => void;
+}

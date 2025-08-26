@@ -36,18 +36,17 @@ const TranslateButtons = () => {
 
   const currentLang = i18n.language;
 
- /**
+  /**
    * Handles language change:
    * 1. Changes language in i18next.
    * 2. Updates localStorage.
    * 3. Rewrites URL prefix to match new language.
    */
-    const changeLanguage = (lng: string) => {
-
+  const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
 
     // Get current path parts, e.g. ["de", "images"]
-    const pathParts = location.pathname.split("/").filter(Boolean); 
+    const pathParts = location.pathname.split("/").filter(Boolean);
     const restOfPath = pathParts.slice(1).join("/");
 
     // Save language in localStorage
@@ -60,7 +59,7 @@ const TranslateButtons = () => {
   return (
     <Box
       sx={{
-        mt: 2,
+        mb: 2,
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -80,7 +79,6 @@ const TranslateButtons = () => {
           <Button
             key={lng}
             onClick={() => changeLanguage(lng)}
-
             // Highlight current language with filled variant
             variant={currentLang === lng ? "contained" : "outlined"}
             sx={{
@@ -88,7 +86,7 @@ const TranslateButtons = () => {
               fontWeight: "bold",
               px: 2,
               py: 1,
-              fontSize: "0.85rem",  // slightly smaller text
+              fontSize: "0.85rem", // slightly smaller text
               minWidth: 50,
             }}
           >

@@ -1,120 +1,46 @@
-// ============================================================================
-// Utility Functions for Pexeso Project
-// ============================================================================
-//
-// This file is divided into two main sections:
-//
-// 1. General Utilities (generic helpers usable across the app)
-//    - _shuffleArray()
-//    - _myFormatSeconds()
-//    - _myToggle()
-//    - Type guards (string, number, language)
-//
-// 2. Game-Specific Utilities (helpers tied directly to Pexeso game logic)
-//    - _shuffleUnMatchedCards()
-//    - createCardsArray()
-//    - showImg()
-//    - preloadImages()
-//
-// Goal:
-//   - Centralize reusable logic outside of UI components
-//   - Keep game logic helpers separated from generic utilities
-//
-// ============================================================================
+/**
+ * ============================================================================
+ * GAME-SPECIFIC UTILITIES
+ * ============================================================================
+ *
+ * This module contains helper functions tightly coupled to the Pexeso game.
+ * Unlike general utilities, these functions directly implement game logic
+ * such as card shuffling, card creation, image revealing, and preloading.
+ *
+ * Responsibilities:
+ * - Shuffle unmatched cards during gameplay
+ * - Create initial card arrays (pairs with unique IDs and classes)
+ * - Reveal cards with respect to game rules
+ * - Preload and decode images for smooth performance
+ *
+ * Notes:
+ * - These functions should remain pure where possible, except when
+ *   interacting with Redux (e.g., dispatching actions).
+ * - Keep UI components thin by centralizing gameplay logic here.
+ *
+ * @example
+ * import { createCardsArray, showImg, preloadImages } from "gameUtils"
+ *
+ * const cards = createCardsArray(6, ["dog", "cat", "fish"]);
+ * preloadImages(["dog", "cat"]).then(() => console.log("ready"));
+ * ============================================================================
+ */
 
 import { showOne } from "@pexeso/lib/redux/store/reducers/gameSlice";
 import type { AppDispatch } from "@pexeso/lib/redux/store/store";
 
 import { v4 as uuidv4 } from "uuid"; // random string generator
-
+import {
+  _shuffleArray
+} from "@pexeso/_inc/functions/general";
 import type {
   My_Type_Card_Obj,
   My_Type_Img_Name,
   My_Type_ImgCount,
-  My_Type_Image,
-  My_Type_Lang,
-} from "./my_types";
-import { LANGUAGE_CONFIG } from "@pexeso/lib/i18n/i18n_MySettings";
+  My_Type_Image
+} from "../my_types";
 
-// ============================================================================
-// 1. GENERAL UTILITIES
-// ============================================================================
 
-/**
- * Shuffle array using the Fisher–Yates algorithm
- *
- * @param arrayIn - input array
- * @returns a new array with elements randomly shuffled
- */
-export function _shuffleArray<T>(arrayIn: T[]): T[] {
-  const array = [...arrayIn];
-
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-
-  return array;
-}
-
-/**
- * Format seconds into string "Xm Ys"
- *
- * @example
- * _myFormatSeconds(125) → "2m 5s"
- */
-export function _myFormatSeconds(seconds: number): string {
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = seconds % 60;
-
-  const minPart = minutes > 0 ? `${minutes}m ` : "";
-  const secPart = `${remainingSeconds}s`;
-
-  return minPart + secPart;
-}
-
-/**
- * Toggle between two CSS classes on a given element
- */
-export function _myToggle(
-  elm: HTMLElement,
-  removedClass: string,
-  addedClass: string
-) {
-  elm.classList.add(addedClass);
-  elm.classList.remove(removedClass);
-}
-
-// -------------------- Type Guards --------------------
-
-/**
- * Type guard for string union types
- */
-export function my_Type_Guard_function<My_Type extends string>(
-  value: string,
-  arr: readonly My_Type[]
-): value is My_Type {
-  return arr.includes(value as My_Type);
-}
-
-/**
- * Type guard for number union types
- */
-export function my_Type_Guard_function_number<My_Type extends number>(
-  value: number,
-  arr: readonly My_Type[]
-): value is My_Type {
-  return arr.includes(value as My_Type);
-}
-
-/**
- * Type guard for validating supported languages
- */
-export const my_Type_Guard_function_isValidLang = (
-  lang: unknown
-): lang is My_Type_Lang => {
-  return LANGUAGE_CONFIG.languages.includes(lang as My_Type_Lang);
-};
 
 // ============================================================================
 // 2. GAME-SPECIFIC UTILITIES

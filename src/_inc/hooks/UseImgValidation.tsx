@@ -1,0 +1,71 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
+import { my_Type_Guard_function } from "@pexeso/_inc/functions/general";
+import type { RootState } from "@pexeso/lib/redux/store/store";
+
+/**
+ * useImgValidation Hook
+ *
+ * Validates the image name from the route parameters against the Redux store.
+ * Provides an error flag, a translated display name (H3), and the raw image name.
+ *
+ * @hook
+ * @returns {object} Validation state:
+ * - `errorImgName` (boolean): true if invalid or missing name
+ * - `imgNameH3` (string): translated heading for the image (or error text)
+ * - `imageName` (string | undefined): raw image name from params
+ *
+ * @dependencies
+ * - react-router-dom (`useParams` for accessing URL params)
+ * - react-redux (`useSelector` for Redux state access)
+ * - react-i18next (`useTranslation` for localized text)
+ * - custom type guard (`my_Type_Guard_function` for validation)
+ *
+ * @remarks
+ * - Error state sets `imgNameH3` to a translated "not exist" string.
+ * - Success state sets `imgNameH3` dynamically from translations using the image name.
+ * - Hook re-runs whenever `name`, `imgNames`, or translations (`t`) change.
+ */
+
+type My_Type_UseImgValidationReturn = {
+  errorImgName: boolean;
+  imgNameH3: string;
+  imageName: string | undefined;
+};
+
+export const useImgValidation = (): My_Type_UseImgValidationReturn => {
+  const { t } = useTranslation();
+  const params = useParams();
+  const { imgNames } = useSelector((state: RootState) => state.game);
+
+  // Extract `name` param safely (only keep strings)
+  const name = typeof params?.name === "string" ? params.name : undefined;
+
+  // Local state: error flag and translated heading
+  const [errorImgName, setErrorImgName] = useState(false);
+  const [imgNameH3, setNameH3] = useState("");
+
+  useEffect(() => {
+    // CASE 1: Missing or invalid param
+    if (!name || typeof name !== "string") {
+      setErrorImgName(true);
+      setNameH3(t("single_img_page.h2.not_exist"));
+      return;
+    }
+
+    // CASE 2: Name not in Redux imgNames list
+    if (!my_Type_Guard_function(name, imgNames)) {
+      setErrorImgName(true);
+      setNameH3(t("single_img_page.h2.not_exist"));
+
+    // CASE 3: Valid image name
+    } else {
+      setErrorImgName(false);
+      setNameH3(t(`single_img_page.h2.${name}`));
+    }
+  }, [name, imgNames, t]);
+
+  return { errorImgName, imgNameH3, imageName: name };
+};
