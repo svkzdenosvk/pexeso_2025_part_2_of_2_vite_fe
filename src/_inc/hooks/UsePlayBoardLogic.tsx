@@ -49,8 +49,8 @@ export const usePlayBoardLogic = (cards: My_Type_Card_Obj[], level: string) => {
 
   useEffect(() => {
     // Cleanup previous timers before setting new ones
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    if (intervalRef.current) clearInterval(intervalRef.current);
+    // if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    // if (intervalRef.current) clearInterval(intervalRef.current);
 
     // --- CASE 1: Card matching logic (after small delay for animations)
     timeoutRef.current = setTimeout(() => {
@@ -81,9 +81,8 @@ export const usePlayBoardLogic = (cards: My_Type_Card_Obj[], level: string) => {
 
     // --- Cleanup on dependency change/unmount ---
     return () => {
-      //   clearTimeout(timeout);
-      //   if (interval) clearInterval(interval);
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+     
+      // if (timeoutRef.current) clearTimeout(timeoutRef.current);
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
   }, [dispatch, cards, level]);

@@ -70,7 +70,7 @@ export const PlayBoard = () => {
   const dispatch = useDispatch();
 
   // Custom hook – encapsulates gameplay logic (match/unmatch + shuffle)
-  usePlayBoardLogic(cards, level);
+ usePlayBoardLogic(cards, level);
 
   return (
     <Box className="row" id="row" sx={rowStyles}>
