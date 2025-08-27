@@ -145,15 +145,15 @@ export function showImg(
   const selectedArr = cards.filter((oneDiv) =>
     oneDiv.classNames.includes("selected_Div_img")
   );
-  const rotateddArr = cards.filter((oneDiv) =>
-    oneDiv.classNames.includes("rotate-center")
-  );
+  // const rotateddArr = cards.filter((oneDiv) =>
+  //   oneDiv.classNames.includes("rotate-center")
+  // );
 
   if (
     /*-------------if divImg is not selected + prevent 3 imgs show*/
     element.classList.contains("mask") &&
-    (selectedArr.length === 0 || selectedArr.length === 1) &&
-    rotateddArr.length === 0
+    (selectedArr.length === 0 || selectedArr.length === 1)// &&
+   // rotateddArr.length === 0
   ) {
     dispatch(showOne(divObject));
   }
