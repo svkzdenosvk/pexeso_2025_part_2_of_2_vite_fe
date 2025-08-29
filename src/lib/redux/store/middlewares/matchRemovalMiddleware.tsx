@@ -35,7 +35,7 @@ export const matchRemovalMiddleware: Middleware<unknown> =
       next(action);
 
       // Step 2: Force reflow to ensure CSS animations trigger
-      // void document.body.offsetHeight;
+      // void document.body.offsetHeight; //trying to comment this to improve performance 
 
       // Step 3: Delay removal to allow animations to complete
       setTimeout(() => {

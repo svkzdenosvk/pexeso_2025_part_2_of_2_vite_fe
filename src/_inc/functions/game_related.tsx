@@ -5,12 +5,11 @@
  *
  * This module contains helper functions tightly coupled to the Pexeso game.
  * Unlike general utilities, these functions directly implement game logic
- * such as card shuffling, card creation, image revealing, and preloading.
+ * such as card shuffling, card creation and preloading.
  *
  * Responsibilities:
  * - Shuffle unmatched cards during gameplay
  * - Create initial card arrays (pairs with unique IDs and classes)
- * - Reveal cards with respect to game rules
  * - Preload and decode images for smooth performance
  *
  * Notes:
@@ -19,15 +18,12 @@
  * - Keep UI components thin by centralizing gameplay logic here.
  *
  * @example
- * import { createCardsArray, showImg, preloadImages } from "gameUtils"
+ * import { createCardsArray, preloadImages } from "gameUtils"
  *
  * const cards = createCardsArray(6, ["dog", "cat", "fish"]);
  * preloadImages(["dog", "cat"]).then(() => console.log("ready"));
  * ============================================================================
  */
-
-import { showOne } from "@pexeso/lib/redux/store/reducers/gameSlice";
-import type { AppDispatch } from "@pexeso/lib/redux/store/store";
 
 import { v4 as uuidv4 } from "uuid"; // random string generator
 import {
@@ -39,7 +35,6 @@ import type {
   My_Type_ImgCount,
   My_Type_Image
 } from "../my_types";
-
 
 
 // ============================================================================
@@ -115,48 +110,6 @@ export function createCardsArray(
 
   // Return final array
   return divItems;
-}
-
-/**
- * Reveals a hidden card if the game rules allow it.
- *
- * Steps:
- * 1. Identify currently selected cards (flipped but not yet matched).
- * 2. Identify cards currently rotating (in animation state).
- * 3. Check conditions:
- *    - Clicked card must still be masked (hidden).
- *    - There can be at most one already selected card.
- *    - No cards should currently be rotating.
- * 4. If all conditions pass, dispatch an action to reveal the clicked card.
- *
- * @param element - The clicked card's HTML container.
- * @param objectLikeCard - Card object containing ID, name, and CSS classes.
- * @param cards - Current array of all cards in the game.
- * @param dispatch - Dispatch from Redux
-
- */
-export function showImg(
-  element: HTMLDivElement,
-  divObject: My_Type_Card_Obj,
-  cards: My_Type_Card_Obj[],
-  dispatch: AppDispatch
-) {
-  /* after match */
-  const selectedArr = cards.filter((oneDiv) =>
-    oneDiv.classNames.includes("selected_Div_img")
-  );
-  // const rotateddArr = cards.filter((oneDiv) =>
-  //   oneDiv.classNames.includes("rotate-center")
-  // );
-
-  if (
-    /*-------------if divImg is not selected + prevent 3 imgs show*/
-    element.classList.contains("mask") &&
-    (selectedArr.length === 0 || selectedArr.length === 1)// &&
-   // rotateddArr.length === 0
-  ) {
-    dispatch(showOne(divObject));
-  }
 }
 
 // -------------------- Image Preloading --------------------

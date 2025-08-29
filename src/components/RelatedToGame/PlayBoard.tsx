@@ -4,26 +4,18 @@ import { Typography, Box } from "@mui/material";
 import type { Theme } from "@mui/material/styles";
 import type { My_Type_Card_Obj } from "@pexeso/_inc/my_types";
 import type { RootState } from "@pexeso/lib/redux/store/store";
-
-// Helper function – reveal image on card click
-// import { showImg } from "@pexeso/_inc/functions/game_related";
 import { usePlayBoardLogic } from "@pexeso/_inc/hooks/UsePlayBoardLogic";
-
-// Card component – renders individual cards
 import Card from "./Card";
 
 /**
  * PlayBoard Component
  *
- * Renders the game board containing all playable cards.
- * Delegates core gameplay mechanics to the `usePlayBoardLogic` hook:
- * - Detects and evaluates selected card pairs (match / unmatch).
- * - Handles hardest-level behavior (continuous reshuffling).
+ * Renders the grid of cards and delegates game logic to `usePlayBoardLogic`.
  *
  * Responsibilities:
- * - Rendering the card grid
- * - Displaying loading state
- * - Passing click events to `showImg` helper
+ * - Render card grid with click interactions.
+ * - Show loading state until cards are ready.
+ * - Pass card clicks to the `revealCard` handler from the hook.
  *
  * @dependencies
  * - React (hooks)
@@ -33,11 +25,6 @@ import Card from "./Card";
  *
  * @example
  * <PlayBoard />
- * 
- * @remarks
- * - Game logic previously split into `useGameMatchLogic` and
- *   `useHardLevelShuffle` has been merged into `usePlayBoardLogic`.
- * - `showImg` manages revealing a card and dispatching intermediate state updates.
  */
 
 // ---------- Sx styles
@@ -67,13 +54,11 @@ export const PlayBoard = () => {
     (state: RootState) => state.game
   ); //-------------with destructuring
 
-  // const dispatch = useDispatch();
-
-  // Custom hook – encapsulates gameplay logic (match/unmatch + shuffle)
-//  usePlayBoardLogic(cards, level);
+  // Hook: encapsulates card match/unmatch + shuffle logic
   const { revealCard } = usePlayBoardLogic(cards, level);
 
-   const handleCardClick = (e: React.MouseEvent, card: My_Type_Card_Obj) => {
+  // Handle click on single card → delegate to hook
+  const handleCardClick = (e: React.MouseEvent, card: My_Type_Card_Obj) => {
     const element = e.currentTarget as HTMLDivElement;
     revealCard(element, card);
   };
@@ -93,11 +78,7 @@ export const PlayBoard = () => {
             <Card
               key={oneCard.id}
               card={oneCard}
-              // onClick={(e) =>
-              //   showImg(e.currentTarget, oneCard, cards, dispatch)
-              // }
-                        onClick={(e) => handleCardClick(e, oneCard)}
-
+              onClick={(e) => handleCardClick(e, oneCard)}
             />
           )
         )
@@ -105,4 +86,3 @@ export const PlayBoard = () => {
     </Box>
   );
 };
-
