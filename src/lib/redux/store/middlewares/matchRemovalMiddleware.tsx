@@ -35,7 +35,7 @@ export const matchRemovalMiddleware: Middleware<unknown> =
       next(action);
 
       // Step 2: Force reflow to ensure CSS animations trigger
-     // void document.body.offsetHeight;
+      // void document.body.offsetHeight;
 
       // Step 3: Delay removal to allow animations to complete
       setTimeout(() => {
@@ -51,6 +51,7 @@ export const matchRemovalMiddleware: Middleware<unknown> =
         if (allImgs.length === disabledImgs.length + 2) {
           storeAPI.dispatch(end_game());
         }
+        // document.body.style.pointerEvents = "auto"; //maybe one in playBoardhook is enough -> comment this to prevent delete the 3rd selected during animation
       }, 200);
     } else {
       // Pass through other actions without modification

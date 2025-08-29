@@ -1,4 +1,4 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { Typography, Box } from "@mui/material";
 import type { Theme } from "@mui/material/styles";
@@ -6,7 +6,7 @@ import type { My_Type_Card_Obj } from "@pexeso/_inc/my_types";
 import type { RootState } from "@pexeso/lib/redux/store/store";
 
 // Helper function – reveal image on card click
-import { showImg } from "@pexeso/_inc/functions/game_related";
+// import { showImg } from "@pexeso/_inc/functions/game_related";
 import { usePlayBoardLogic } from "@pexeso/_inc/hooks/UsePlayBoardLogic";
 
 // Card component – renders individual cards
@@ -67,11 +67,16 @@ export const PlayBoard = () => {
     (state: RootState) => state.game
   ); //-------------with destructuring
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   // Custom hook – encapsulates gameplay logic (match/unmatch + shuffle)
- usePlayBoardLogic(cards, level);
+//  usePlayBoardLogic(cards, level);
+  const { revealCard } = usePlayBoardLogic(cards, level);
 
+   const handleCardClick = (e: React.MouseEvent, card: My_Type_Card_Obj) => {
+    const element = e.currentTarget as HTMLDivElement;
+    revealCard(element, card);
+  };
   return (
     <Box className="row" id="row" sx={rowStyles}>
       {/* Show loading message while images are being prepared */}
@@ -88,9 +93,11 @@ export const PlayBoard = () => {
             <Card
               key={oneCard.id}
               card={oneCard}
-              onClick={(e) =>
-                showImg(e.currentTarget, oneCard, cards, dispatch)
-              }
+              // onClick={(e) =>
+              //   showImg(e.currentTarget, oneCard, cards, dispatch)
+              // }
+                        onClick={(e) => handleCardClick(e, oneCard)}
+
             />
           )
         )
