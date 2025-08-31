@@ -1,4 +1,3 @@
-
 // hooks/usePlayBoardLogic.ts
 import { useEffect, useRef, useCallback, useMemo } from "react";
 import { useDispatch } from "react-redux";
@@ -54,17 +53,13 @@ export const usePlayBoardLogic = (cards: My_Type_Card_Obj[], level: string) => {
 
   // Memoized card reveal handler
   const revealCard = useCallback(
-    (
-      element: HTMLDivElement,
-      divObject: My_Type_Card_Obj
-    ) => {
+    (element: HTMLDivElement, divObject: My_Type_Card_Obj) => {
       if (
         element.classList.contains("mask") &&
         (selectedCards.length === 0 || selectedCards.length === 1)
       ) {
         dispatch(showOne(divObject));
       }
- 
     },
     [selectedCards, dispatch]
   );
@@ -72,11 +67,10 @@ export const usePlayBoardLogic = (cards: My_Type_Card_Obj[], level: string) => {
   useEffect(() => {
     // Clear previous timeout (avoid multiple overlapping executions)
     if (timeoutRef.current) clearTimeout(timeoutRef.current); //Chat GPT advice -> only one is enough
-    // if (intervalRef.current) clearInterval(intervalRef.current); //DeepSeek advice
+    if (intervalRef.current) clearInterval(intervalRef.current); //DeepSeek advice, but maybe not needed .. testing performance
 
     // --- CASE 1: Card matching logic (after small delay for animations)
     timeoutRef.current = setTimeout(() => {
-      
       if (selectedCards.length === 2) {
         if (selectedCards[0].name === selectedCards[1].name) {
           dispatch(match()); // Cards match
@@ -85,7 +79,7 @@ export const usePlayBoardLogic = (cards: My_Type_Card_Obj[], level: string) => {
         }
       }
 
-     // Re-enable pointer events after evaluation
+      // Re-enable pointer events after evaluation
       document.body.style.pointerEvents = "auto";
     }, 200);
 
@@ -97,7 +91,7 @@ export const usePlayBoardLogic = (cards: My_Type_Card_Obj[], level: string) => {
     }
     // --- Cleanup on dependency change/unmount ---
     return () => {
-     // if (timeoutRef.current) clearTimeout(timeoutRef.current); // not needed as help from ChatGPT
+      if (timeoutRef.current) clearTimeout(timeoutRef.current); // not needed as help from ChatGPT, but in reality maybe it helps
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
   }, [dispatch, selectedCards, level]); // selectedCards namiesto cards
