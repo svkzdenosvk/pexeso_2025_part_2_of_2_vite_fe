@@ -1,54 +1,100 @@
-# React + TypeScript + Vite
+# 🃏 Pexeso Game (Vite + React)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a **Pexeso memory game** built with [Vite](https://vitejs.dev/) and React.  
+The game features interactive cards, multiple difficulty levels, and Redux-powered state management.
 
-Currently, two official plugins are available:
+🌐 **Live Demo:** [https://pexeso-vite.netlify.app](https://pexeso-vite.netlify.app)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## ✨ Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- 🧠 Memory card matching (Pexeso style)  
+- 🎚️ Multiple difficulty levels (easy, hard)  
+- 🎴 Animated card flipping  
+- 🔄 Shuffle mechanic on hard level  
+- 🌍 Localization with `react-i18next`  
+- 📦 State management via Redux Toolkit  
+- 🎨 Responsive UI with Material-UI (MUI)  
+- ⚡ Fast dev & build powered by Vite  
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+---
+
+## 📂 Project Structure
+
+```plaintext
+App.tsx
+index.css
+main.tsx
+vite-env.d.ts
+
+assets/                # static images
+components/            # UI components
+  ├── LogReg/          # login & registration
+  ├── OutsideTheGame/  # layouts & pages outside gameplay
+  ├── RelatedToGame/   # core game components
+  └── StylingComp/     # themes & shared styles
+lib/                   # firebase, i18n, redux
+_inc/                  # types, hooks, helper functions
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🎮 How to Play
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+1. Click cards to reveal hidden images  
+2. Find all matching pairs to win  
+3. On **hard mode**, cards shuffle periodically for extra challenge  
+4. Game ends when all pairs are matched 🎉  
+
+---
+
+## 🚀 Getting Started
+Install dependencies and start the dev server:
+
+```bash
+# with npm
+npm install
+npm run dev
 ```
+Then open http://localhost:5173 in your browser.
+
+Enjoy the game! 🎮
+
+---
+
+## 📦 Tech Stack
+
+### Frontend
+- ⚛️ **React + Vite**
+- 🎨 **Material-UI (MUI)**
+- 🌍 **react-i18next**
+
+### State & Data
+- 🗃️ **Redux Toolkit**
+- 🔥 **Firebase (Auth + Firestore)**
+
+---
+
+## 📖 Learn More
+
+- [📘 Vite Documentation](https://vitejs.dev/)  
+- [⚛️ React Documentation](https://react.dev/)  
+- [🗃️ Redux Toolkit](https://redux-toolkit.js.org/)  
+- [🎨 Material-UI](https://mui.com/)  
+- [🌍 React i18next](https://react.i18next.com/)  
+
+---
+
+## 🌐 Deployment
+
+This project is deployed on **Netlify**.  
+Check out the [Netlify Docs](https://docs.netlify.com/) for more details.  
+
+---
+
+## 🤝 Contributing
+
+Found an issue or want to contribute?  
+Feel free to open an **issue** or a **pull request**.  
+
