@@ -103,3 +103,17 @@ export const my_Type_Guard_function_isValidLang = (
 ): lang is My_Type_Lang => {
   return LANGUAGE_CONFIG.languages.includes(lang as My_Type_Lang);
 };
+
+/*-------------------------------------------------------------------------- */
+import type { My_Type_User } from '@pexeso/_inc/my_types';
+
+export function isLike_My_Type_User(obj: unknown): obj is My_Type_User {
+  if (typeof obj !== 'object' || obj === null) return false;
+
+  const maybe = obj as Record<string, unknown>;
+  return (
+    typeof maybe.id === 'number' &&
+    typeof maybe.email === 'string' &&
+    typeof maybe.name === 'string'
+  );
+}

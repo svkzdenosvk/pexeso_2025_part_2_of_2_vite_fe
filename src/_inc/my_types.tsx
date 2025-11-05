@@ -156,7 +156,7 @@ export type My_Type_LoginParams = {
   password: string;
   lang: My_Type_Lang; // validated language code
   dispatch: AppDispatch; // redux dispatch
-  navigate: (path: string) => void; // navigation callback
+  navigation: (path: string) => void; // navigation callback
   setError: (error: string) => void; // state setter for error messages
   setIsLoading: (loading: boolean) => void;  // state setter for loading
 }
