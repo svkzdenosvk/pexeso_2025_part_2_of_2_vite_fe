@@ -45,7 +45,7 @@ export const handleRegister = async ({
   setError("");
 
   try {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/register`, {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
