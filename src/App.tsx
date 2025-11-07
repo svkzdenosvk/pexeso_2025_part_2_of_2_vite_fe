@@ -22,7 +22,7 @@ import SingleImg from "@pexeso/components/OutsideTheGame/pages/SingleImg";
 import ErrorPage from "@pexeso/components/OutsideTheGame/pages/ErrorPage";
 import Registration from "@pexeso/components/LogReg/pages/Registration";
 import Login from "@pexeso/components/LogReg/pages/Login";
-import { useAuthState } from "@pexeso/_inc/hooks/UseAuthState";
+import { useAuthCheck } from "@pexeso/_inc/hooks/UseAuthCheck";
 import { useImagePreloading } from "@pexeso/_inc/hooks/UseImagePreloading";
 
 /**
@@ -85,7 +85,7 @@ const App = () => {
    * - If found, sets user data in Redux store
    * - On sign out, clears Redux user state
    */
-  useAuthState();
+  useAuthCheck();
 
   /**
    * Hook: Preload game images before start.

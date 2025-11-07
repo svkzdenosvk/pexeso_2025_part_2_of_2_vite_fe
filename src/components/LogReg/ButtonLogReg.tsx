@@ -41,10 +41,13 @@ export const ButtonLogReg = () => {
   // ---------- Function: Logout handler
   const handleLogout = async () => {
     try {
-      const res = await fetch("/api/logout", {
-        method: "GET",
-        credentials: "include", // Send cookies
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL || "http://localhost:3000/api"}/logout`,
+        {
+          method: "GET",
+          credentials: "include", // Send cookies
+        }
+      );
 
       if (!res.ok) throw new Error("Logout failed");
 
@@ -95,7 +98,6 @@ export const ButtonLogReg = () => {
 };
 
 export default ButtonLogReg;
-
 
 // import { Box, Button, Typography } from "@mui/material";
 // import { Link, useParams } from "react-router-dom";
@@ -195,7 +197,7 @@ export default ButtonLogReg;
 //           </Button>
 //         </>
 //       ) : (
-        
+
 //         // If logged in -> show Logout button
 //         <Button
 //           variant="contained"

@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { setUser, clearUser } from '@pexeso/lib/redux/store/reducers/authSlice';
-import type { AppDispatch } from '@pexeso/lib/redux/store/store';
-import { isLike_My_Type_User } from '@pexeso/_inc/functions/general';
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setUser, clearUser } from "@pexeso/lib/redux/store/reducers/authSlice";
+import type { AppDispatch } from "@pexeso/lib/redux/store/store";
+import { isLike_My_Type_User } from "@pexeso/_inc/functions/general";
 
 /**
  * useAuthCheck Hook
@@ -25,11 +25,15 @@ export const useAuthCheck = () => {
     const checkLogin = async () => {
       try {
         // ---------- 1. Validate current session with backend API (GET /api/me)
-        const res = await fetch('/api/me', {
-          method: 'GET',
-          credentials: 'include', // Send cookies with request
-        });
-
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL || "http://localhost:3000/api"}/me`,
+          {
+            method: "GET",
+            credentials: "include", // Send cookies with request
+          }
+        );
+        console.log("ME status:", res.status);
+        // const text = await res.text();
         // ---------- 2. Handle invalid or expired session
         if (!res.ok) {
           dispatch(clearUser());
@@ -37,8 +41,10 @@ export const useAuthCheck = () => {
         }
 
         const data = await res.json();
-        
-   // validation if user from api is right format
+
+        console.log("data", res.status);
+
+        // validation if user from api is right format
         if (!isLike_My_Type_User(data.user)) {
           dispatch(clearUser());
           return;
@@ -59,7 +65,6 @@ export const useAuthCheck = () => {
     checkLogin();
   }, [dispatch]);
 };
-
 
 // import { useEffect } from "react";
 // import { useDispatch } from "react-redux";
@@ -145,7 +150,7 @@ export const useAuthCheck = () => {
 //         dispatch(clearUser());
 //       }
 //     });
-    
+
 //     // Cleanup: unsubscribe from Firebase listener when component unmounts
 //     return () => unsubscribe();
 //   }, [dispatch]);
