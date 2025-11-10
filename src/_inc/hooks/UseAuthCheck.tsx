@@ -9,14 +9,20 @@ import { isLike_My_Type_User } from "@pexeso/_inc/functions/general";
  *
  * Purpose:
  * - Validates user authentication status on app initialization or route change.
- * - Calls `/api/me` to verify or refresh JWT tokens (short/long term).
- * - Updates the Redux store based on authentication state.
+ * - Communicates with the backend API to verify or refresh session (via cookies / JWT).
+ * - Keeps the Redux store synchronized with the actual authentication state.
  *
  * Workflow:
- * 1. Fetch `/api/me` to validate session via cookies.
- * 2. If valid, store user data in Redux; otherwise, clear the user state.
- * 3. Runs automatically on route change or first load.
- * 4. Handle unexpected errors (e.g., network issues) by clearing user state.
+ * 1. Fetch Express `/api/me` to validate or refresh the user's session using cookies.
+ * 2. If valid, dispatch `setUser()` with user data.
+ * 3. If invalid, expired, or network error occurs → dispatch `clearUser()`.
+ * 4. Runs automatically on first render and whenever the Redux dispatch reference changes.
+ *
+ * @dependencies
+ * - React: useEffect
+ * - Redux: useDispatch, setUser, clearUser
+ * - Backend API: `/api/me`
+ * - Type guard: isLike_My_Type_User
  */
 export const useAuthCheck = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -32,8 +38,7 @@ export const useAuthCheck = () => {
             credentials: "include", // Send cookies with request
           }
         );
-        console.log("ME status:", res.status);
-        // const text = await res.text();
+
         // ---------- 2. Handle invalid or expired session
         if (!res.ok) {
           dispatch(clearUser());
@@ -44,12 +49,13 @@ export const useAuthCheck = () => {
 
         console.log("data", res.status);
 
-        // validation if user from api is right format
+        // Validate that the API response matches expected user type
         if (!isLike_My_Type_User(data.user)) {
           dispatch(clearUser());
           return;
         }
-        // ---------- 3. If user is logged in, update Redux store
+        
+        // ---------- 3. If backend confirms active session, update Redux store
         if (data?.isLoggedIn) {
           dispatch(setUser(data.user));
         } else {

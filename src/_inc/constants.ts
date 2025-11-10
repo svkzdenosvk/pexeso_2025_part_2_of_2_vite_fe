@@ -32,14 +32,3 @@ export const loginPageErrorMap: Record<string, string> = {
   not_allowed_origin: 'invalid_origin',
 };
 
-/**
- * Mapping of Firebase error codes to custom i18n-friendly keys.
- * Used in api login route
-//  */
-// export const dbLoginRouteErrorMap: Record<string, string> = {
-//   INVALID_PASSWORD: 'invalid_credentials',
-//   EMAIL_NOT_FOUND: 'invalid_credentials',
-//   MISSING_PASSWORD: 'missing_credentials',
-//   TOO_MANY_ATTEMPTS_TRY_LATER: 'too_many_req',
-//   USER_DISABLED: 'login_failed',
-// };

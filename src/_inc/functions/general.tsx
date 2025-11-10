@@ -11,15 +11,6 @@
  * - DOM utilities (e.g., CSS class toggling)
  * - Type guards for string/number unions and supported languages
  *
- * Notes:
- * - Keep this file focused on "pure" or stateless helpers
- * - Any feature-specific logic belongs in a dedicated module
- * - Naming convention: helpers prefixed with `_my...`, type guards with
- *   `my_Type_Guard_function...` for clarity
- *
- * @example
- * const arr = [1, 2, 3];
- * const shuffled = _shuffleArray(arr);
  *
  * ============================================================================
  */
@@ -105,6 +96,21 @@ export const my_Type_Guard_function_isValidLang = (
 };
 
 /*-------------------------------------------------------------------------- */
+/**
+ * Type guard to check if an object matches the shape of `My_Type_User`
+ *
+ * Validates that the object has the required properties with correct types:
+ * - `id` as number
+ * - `email` as string
+ * - `name` as string
+ *
+ * Useful for runtime validation of objects coming from external sources
+ * (e.g., backend API responses) before storing them in Redux or using them
+ * in the UI.
+ *
+ * @param obj - unknown object to validate
+ * @returns boolean indicating if `obj` is a valid `My_Type_User`
+ */
 import type { My_Type_User } from '@pexeso/_inc/my_types';
 
 export function isLike_My_Type_User(obj: unknown): obj is My_Type_User {

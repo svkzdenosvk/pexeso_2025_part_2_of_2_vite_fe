@@ -28,30 +28,35 @@ import { useImagePreloading } from "@pexeso/_inc/hooks/UseImagePreloading";
 /**
  * App Component
  *
- * Main React component of the application which provides:
- * - Global theme setup based on Redux state (default, medium, hard)
- * - Routing control using react-router-dom with i18n support
- * - User authentication management via Firebase Auth and Firestore (viac custom hook)
- * - Preloading of images required for the game and loading state management (via custom hook)
+ * Main React component of the application.
  *
- * @component
- * @remarks
- * Uses Redux to get game and user state.
- * Uses react-i18next for translations.
- * Utilizes Material-UI ThemeProvider and CssBaseline for consistent styling.
+ * Responsibilities:
+ * - Provides global theme setup based on Redux state (default, medium, hard)
+ * - Handles routing using react-router-dom with language prefixes and i18n support
+ * - Manages user authentication state via custom hook `useAuthCheck` (backend API)
+ * - Preloads game images with `useImagePreloading` hook for smoother UX
  *
- * @dependencies
- * react, react-router-dom, react-redux, firebase/auth, firebase/firestore,
- * react-i18next, @mui/material, custom Pexeso modules (themes, components, hooks, Redux slices)
+ * Notes:
+ * - Uses Redux to access game and user state
+ * - Uses react-i18next for translations
+ * - Utilizes Material-UI ThemeProvider and CssBaseline for consistent styling
+ * - Replaces any previous Firebase-based auth logic with backend API
+ *
+ * Dependencies:
+ * react, react-router-dom, react-redux, react-i18next, @mui/material
+ * Custom Pexeso modules: themes, layouts, pages, hooks, Redux slices
+ *
+ * Example usage:
+ * <App />
  */
 
 // ---------- Component
 
 const App = () => {
   const { i18n } = useTranslation();
-  //------------------------------------redux-----------------------------------------
+  // ---------- Redux state ----------
 
-  // Game state from Redux 
+  // Get current theme from Redux state
   const { theme: localVariableTheme } = useSelector(
     (state: RootState) => state.game
   );
@@ -67,7 +72,7 @@ const App = () => {
   const currentTheme =
     importedThemes[localVariableTheme as My_Type_Theme] ?? defaultTheme;
 
-  //------------------------------------------------------------------------------------------------------------
+  // ---------- Layout styles ----------
 
   // Base layout styles for the main application wrapper
   const dynamicWrapperStyles = {
@@ -78,25 +83,17 @@ const App = () => {
     alignItems: "center",
   };
 
-  /**
-   * Hook: Observes user authentication state with Firebase Auth.
-   * - On sign in, checks if the user exists in Firestore
-   * - If not found, signs out user and clears Redux user state
-   * - If found, sets user data in Redux store
-   * - On sign out, clears Redux user state
-   */
+  // ---------- Custom hooks ----------
+
+  // Check authentication status with backend API
+  // Updates Redux store automatically
   useAuthCheck();
 
-  /**
-   * Hook: Preload game images before start.
-   * - When `isLoading` is true, caches all required images.
-   * - On success: dispatches `set_loading()` to update Redux.
-   * - On failure: reloads page to retry.
-   */
-
+  // Preload images required for the game
+  // Handles loading state and retries if preloading fails
   useImagePreloading();
- 
-  // Select language from localStorage, i18n, or fallback config
+
+  // ---------- Language selection ----------
   const storedLocalStorageLang = localStorage.getItem("lang");
   const setlang =
     storedLocalStorageLang || i18n.language || LANGUAGE_CONFIG.fallbackLang;
