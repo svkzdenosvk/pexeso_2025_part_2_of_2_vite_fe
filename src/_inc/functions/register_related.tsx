@@ -68,7 +68,9 @@ export const handleRegister = async ({
 
     // success
     resetForm();
-    navigate(`/${lang}/login?fromRegister=true`);
+    navigate(`/${lang}/login`, { state: { fromRegister: true } });
+
+    // navigate(`/${lang}/login?fromRegister=true`);
   } catch (err) {
     console.error("Registration error:", err);
     setError("reg_page.error_alert.network_error");
