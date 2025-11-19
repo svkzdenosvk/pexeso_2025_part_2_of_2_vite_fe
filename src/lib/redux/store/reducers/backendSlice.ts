@@ -27,17 +27,11 @@ import type { My_Type_BE } from "@pexeso/_inc/my_types";
 //---------------redux toolkit
 type BackendState = {
   active: My_Type_BE;
-  url: {
-    express: string;
-    nest: string;
-  };
+  url: string;
 };
 const initialState: BackendState = {
   active: "express",
-  url: {
-    express: "https://pexeso-2025-part-1-of-2-express-be.onrender.com/api",
-    nest: "WILL BE REPLACED",
-  },
+  url: "https://pexeso-2025-part-1-of-2-express-be.onrender.com/api",
 };
 
 const backendSlice = createSlice({
@@ -45,7 +39,14 @@ const backendSlice = createSlice({
   initialState, // Default starting value
   reducers: {
     set_backend: (state, action: PayloadAction<"express" | "nest">) => {
+      const beUrlChanges = {
+        express: "https://pexeso-2025-part-1-of-2-express-be.onrender.com/api",
+        nest: "WILL BE REPLACED",
+      };
+
       state.active = action.payload; // set express | nest
+      // state.url = beUrlChanges[action.payload as My_Type_BE] as string;
+      state.url = beUrlChanges[action.payload];
     },
   },
 });
