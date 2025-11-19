@@ -1,8 +1,9 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser, clearUser } from "@pexeso/lib/redux/store/reducers/authSlice";
 import type { AppDispatch } from "@pexeso/lib/redux/store/store";
 import { isLike_My_Type_User } from "@pexeso/_inc/functions/general";
+import { selectBackendUrl } from "@pexeso/lib/redux/store/reducers/backendSlice";
 
 /**
  * useAuthCheck Hook
@@ -27,13 +28,17 @@ import { isLike_My_Type_User } from "@pexeso/_inc/functions/general";
 export const useAuthCheck = () => {
   const dispatch = useDispatch<AppDispatch>();
 
+  //dynamic be URL from Redux
+  const backendUrl = useSelector(selectBackendUrl);
+
   useEffect(() => {
     const checkLogin = async () => {
       try {
         // ---------- 1. Validate current session with backend API (GET /api/me)
         const res = await fetch(
-          `${import.meta.env.VITE_API_URL || "http://localhost:3000/api"}/me`,
-          {
+          // `${import.meta.env.VITE_API_URL || "http://localhost:3000/api"}/me`,
+          `${backendUrl}/me`, {
+
             method: "GET",
             credentials: "include", // Send cookies with request
           }
@@ -47,7 +52,7 @@ export const useAuthCheck = () => {
 
         const data = await res.json();
 
-        console.log("data", res.status);
+        // console.log("data", res.status);
 
         // Validate that the API response matches expected user type
         if (!isLike_My_Type_User(data.user)) {
@@ -69,95 +74,6 @@ export const useAuthCheck = () => {
     };
 
     checkLogin();
-  }, [dispatch]);
+  }, [dispatch, backendUrl]);
 };
 
-// import { useEffect } from "react";
-// import { useDispatch } from "react-redux";
-// import { onAuthStateChanged } from "firebase/auth";
-// import { doc, getDoc } from "firebase/firestore";
-// import { auth, projectUsers } from "@pexeso/lib/firebase/firestoreConfigUsers";
-// import { setUser, clearUser } from "@pexeso/lib/redux/store/reducers/authSlice";
-// import type { AppDispatch } from "@pexeso/lib/redux/store/store";
-
-// /**
-//  * useAuthState Hook
-//  *
-//  * Observes Firebase Authentication state and synchronizes it
-//  * with the Redux store. Ensures that user profile data exists
-//  * in Firestore before setting the authenticated user.
-//  *
-//  * @hook
-//  * @returns void (side effects only)
-//  *
-//  * @dependencies
-//  * - Firebase Authentication (`onAuthStateChanged`, `auth`)
-//  * - Firestore (`getDoc`, `projectUsers`)
-//  * - Redux (`setUser`, `clearUser`)
-//  *
-//  * @example
-//  * ```tsx
-//  * // Inside the root App component
-//  * useAuthState();
-//  * ```
-//  *
-//  * @remarks
-//  * - On sign in: verifies the user profile exists in Firestore.
-//  *   - If not found → signs out the user and clears Redux state.
-//  *   - If found → dispatches `setUser()` with user details.
-//  * - On sign out: clears Redux state via `clearUser()`.
-//  * - Automatically unsubscribes from Firebase listener on cleanup.
-//  */
-// export const useAuthState = () => {
-//   const dispatch = useDispatch<AppDispatch>();
-
-//   useEffect(() => {
-//     // Subscribe to Firebase Auth state changes (login/logout events)
-//     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-//       // CASE 1: User is signed in and has an email
-//       if (user?.email) {
-//         try {
-//           // Create a reference to the user's document in Firestore
-//           const docRef = doc(projectUsers, "users", user.uid);
-
-//           // Fetch the document snapshot from Firestore
-//           const docSnap = await getDoc(docRef);
-
-//           // If the user profile document does not exist in Firestore:
-//           if (!docSnap.exists()) {
-//             // 1. Immediately sign the user out (invalid profile)
-//             await auth.signOut();
-
-//             // 2. Clear Redux user state
-//             dispatch(clearUser());
-//             return; // stop further execution
-//           }
-
-//           // If profile exists → extract user data
-//           const data = docSnap.data();
-
-//           // Save the user into Redux state with fallback values
-//           dispatch(
-//             setUser({
-//               uid: user.uid,
-//               name: data?.name ?? "", // default empty string if missing
-//               email: user.email,
-//             })
-//           );
-//         } catch (err) {
-//           // Error during checking of profile in Firestore
-//           console.error("Error during checking of profile in Firestore:", err);
-
-//           // Clear Redux user state for safety
-//           dispatch(clearUser());
-//         }
-//       } else {
-//         // CASE 2: User is signed out (no user or no email)
-//         dispatch(clearUser());
-//       }
-//     });
-
-//     // Cleanup: unsubscribe from Firebase listener when component unmounts
-//     return () => unsubscribe();
-//   }, [dispatch]);
-// };

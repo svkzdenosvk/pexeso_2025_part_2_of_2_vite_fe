@@ -90,15 +90,15 @@ export const handleRegister = async ({
   setIsLoading,
   resetForm,
   navigate,
-}: My_Type_RegisterParams & { navigate: (path: string) => void }) => {
+  backendUrl
+}: My_Type_RegisterParams & { navigate: (path: string) => void; backendUrl: string }) => {
   setIsLoading(true);
   setError("");
 
   try {
     const res = await fetch(
-      // `${import.meta.env.VITE_API_URL}/registration`, 
-      `${import.meta.env.VITE_API_URL || "http://localhost:3000/api"}/registration`,
-      {
+      // `${import.meta.env.VITE_API_URL || "http://localhost:3000/api"}/registration`,
+      `${backendUrl}/registration`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",

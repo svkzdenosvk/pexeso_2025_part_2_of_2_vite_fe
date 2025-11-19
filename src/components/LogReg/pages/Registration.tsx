@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectBackendUrl } from "@pexeso/lib/redux/store/reducers/backendSlice";
 import { useTranslation } from "react-i18next";
 import {
   TextField,
@@ -63,6 +65,9 @@ const sxStyles = {
 export const Registration = () => {
   const { t } = useTranslation();
 
+//dynamic be URL from Redux
+const backendUrl = useSelector(selectBackendUrl);
+
   // Navigation & route language param
   const navigate = useNavigate();
   const { lang } = useParams<{ lang?: string }>(); // get lang param from route
@@ -122,6 +127,7 @@ export const Registration = () => {
       setIsLoading,
       resetForm,
       navigate,
+      backendUrl,
     });
   };
 

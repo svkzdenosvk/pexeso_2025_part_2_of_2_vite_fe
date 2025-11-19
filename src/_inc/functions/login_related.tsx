@@ -47,7 +47,8 @@ export const handleLogin = async ({
   setError,
   setIsLoading,
   navigation,
-}: My_Type_LoginParams) => {
+  backendUrl,
+}: My_Type_LoginParams & { backendUrl: string }) => {
   // ---------- 1. Start loading state and clear previous errors
   setIsLoading(true);
   setError("");
@@ -56,9 +57,9 @@ export const handleLogin = async ({
   try {
     // ---------- 2. Send credentials to backend API
     const res = await fetch(
-      `${import.meta.env.VITE_API_URL || "http://localhost:3000/api"}/login`,
-      // `${backendURL}/login`
-      {
+      // `${import.meta.env.VITE_API_URL || "http://localhost:3000/api"}/login`,
+       `${backendUrl}/login`, {
+      
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

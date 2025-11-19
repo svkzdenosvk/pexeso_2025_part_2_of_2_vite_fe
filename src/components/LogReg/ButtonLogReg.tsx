@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@pexeso/lib/redux/store/store";
 import { clearUser } from "@pexeso/lib/redux/store/reducers/authSlice";
+import { selectBackendUrl } from "@pexeso/lib/redux/store/reducers/backendSlice";
 
 /**
  * ButtonLogReg Component
@@ -26,10 +27,6 @@ import { clearUser } from "@pexeso/lib/redux/store/reducers/authSlice";
  * - State & i18n: react-redux, react-i18next
  * - UI components: @mui/material
  * - Backend Express API: /logout endpoint (clears auth cookies / session)
- * - Redux slice: clearUser
- *
- * @example
- * <ButtonLogReg />
  */
 
 // ----------  Sxstyles
@@ -57,12 +54,14 @@ export const ButtonLogReg = () => {
   const { t } = useTranslation();
 
   const { user } = useSelector((state: RootState) => state.auth); // get user from Redux
+  const backendUrl = useSelector(selectBackendUrl); // ← Redux backend URL
 
   // ---------- Function: Logout handler
   const handleLogout = async () => {
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL || "http://localhost:3000/api"}/logout`,
+        // `${import.meta.env.VITE_API_URL || "http://localhost:3000/api"}/logout`,
+        `${backendUrl}/logout`,
         {
           method: "GET",
           credentials: "include", // Send cookies
@@ -118,4 +117,3 @@ export const ButtonLogReg = () => {
 };
 
 export default ButtonLogReg;
-

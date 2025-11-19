@@ -19,6 +19,8 @@ import { handleLogin } from "@pexeso/_inc/functions/login_related";
 import { my_Type_Guard_function_isValidLang } from "@pexeso/_inc/functions/general";
 import PublicOnlyRoute from "../PublicOnlyRoute";
 import type { My_Type_Lang } from "@pexeso/_inc/my_types";
+import { useSelector } from "react-redux";
+import { selectBackendUrl } from "@pexeso/lib/redux/store/reducers/backendSlice";
 
 /**
  * Login Component
@@ -70,6 +72,9 @@ export const Login = () => {
     ? lang
     : "en"; // fallback
 
+  //dynamic be URL from Redux
+  const backendUrl = useSelector(selectBackendUrl);
+
   // Reset settings from the game by own hook
   useResetSettings();
 
@@ -85,6 +90,7 @@ export const Login = () => {
       dispatch,
       setError,
       setIsLoading,
+       backendUrl,  
       navigation: () => navigate(`/${safeLang}/`),
     });
   };
@@ -155,4 +161,3 @@ export const Login = () => {
 };
 
 export default Login;
-

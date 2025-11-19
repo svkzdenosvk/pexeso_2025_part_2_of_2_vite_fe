@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { My_Type_BE } from "@pexeso/_inc/my_types";
+import type { RootState } from "../store"; // adjust path
+
 /**
  * Seconds Slice
  *
@@ -34,19 +36,18 @@ const initialState: BackendState = {
   url: "https://pexeso-2025-part-1-of-2-express-be.onrender.com/api",
 };
 
+export const backendUrls: Record<My_Type_BE, string> = {
+  express: "https://pexeso-2025-part-1-of-2-express-be.onrender.com/api",
+  nest: "WILL BE REPLACED",
+};
+
 const backendSlice = createSlice({
   name: "backend", // Slice name in Redux state
   initialState, // Default starting value
   reducers: {
     set_backend: (state, action: PayloadAction<"express" | "nest">) => {
-      const beUrlChanges = {
-        express: "https://pexeso-2025-part-1-of-2-express-be.onrender.com/api",
-        nest: "WILL BE REPLACED",
-      };
-
       state.active = action.payload; // set express | nest
-      // state.url = beUrlChanges[action.payload as My_Type_BE] as string;
-      state.url = beUrlChanges[action.payload];
+      state.url = backendUrls[action.payload];
     },
   },
 });
@@ -56,3 +57,6 @@ export const { set_backend } = backendSlice.actions;
 
 // Export reducer for inclusion in the store
 export default backendSlice.reducer;
+
+export const selectBackendUrl = (state: RootState) => state.backend.url;
+export const selectBackend = (state: RootState) => state.backend.active;
