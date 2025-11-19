@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Button, ButtonGroup, Box } from "@mui/material";
+import { Button, ButtonGroup, Box, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { LANGUAGE_CONFIG } from "@pexeso/lib/i18n/i18n_MySettings";
 
@@ -61,10 +61,16 @@ const TranslateButtons = () => {
       sx={{
         mb: 2,
         display: "flex",
-        justifyContent: "center",
+        justifyContent: "space-between",
         alignItems: "center",
+        gap:'0.5rem',
+
+        "@media (max-width: 550px)": {
+          flexDirection: "column",
+        },
       }}
     >
+      <Typography variant="h6">Lang:</Typography>
       {/* Language selection buttons */}
       <ButtonGroup
         variant="outlined"

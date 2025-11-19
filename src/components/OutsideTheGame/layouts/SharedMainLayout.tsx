@@ -3,6 +3,7 @@ import { Box, Button } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { sharedNavLinkStyles } from "@pexeso/components/StylingComp/SharedStyles";
 import TranslateButtons from "../TranslateButtons";
+import BackendButtons from "../BackendButtons";
 
 /**
  * SharedLayout Component
@@ -36,6 +37,17 @@ const sharedMainWrapperStyles = {
   display: "flex",
   flexDirection: "column",
 } as const;
+
+const btnsGroupsStyles = {
+  width: "100%",
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "space-evenly",
+  
+  "@media (max-width: 409px)": {
+    flexDirection: "column",
+  },
+};
 
 // Header container for the navigation bar
 const sharedHeaderNavigation = {
@@ -88,8 +100,11 @@ const SharedMainLayout = () => {
   return (
     // Wrapper for the entire layout
     <Box sx={sharedMainWrapperStyles}>
-      {/* Language switcher */}
-      <TranslateButtons />
+      <Box sx={btnsGroupsStyles}>
+        {/* Language switcher */}
+        <TranslateButtons />
+        <BackendButtons />
+      </Box>
       {/* Header navigation */}
       <Box sx={sharedHeaderNavigation}>
         <Box sx={navStyles}>

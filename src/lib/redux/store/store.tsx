@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import gameReducer from "./reducers/gameSlice";
 import secondsReducer from "./reducers/secondsSlice";
 import authReducer from "./reducers/authSlice";
+import backendReducer from "./reducers/backendSlice";
 
 import { matchRemovalMiddleware } from "@pexeso/lib/redux/store/middlewares/matchRemovalMiddleware";
 
@@ -39,6 +40,7 @@ export const store = configureStore({
     game: gameReducer, // Game-related state
     time: secondsReducer, // Timer-related state
     auth: authReducer, // Authentication-related state
+    backend: backendReducer, //Backend express or nest
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(matchRemovalMiddleware),

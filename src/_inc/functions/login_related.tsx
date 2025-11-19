@@ -2,6 +2,8 @@ import { setUser } from "@pexeso/lib/redux/store/reducers/authSlice";
 import type { My_Type_LoginParams } from "@pexeso/_inc/my_types";
 import { isLike_My_Type_User } from "@pexeso/_inc/functions/general";
 import { loginPageErrorMap } from "@pexeso/_inc/constants";
+// import {useSelector } from 'react-redux';
+// import { set_backend } from "@pexeso/lib/redux/store/reducers/backendlice";
 
 /**
  * ============================================================================
@@ -49,11 +51,13 @@ export const handleLogin = async ({
   // ---------- 1. Start loading state and clear previous errors
   setIsLoading(true);
   setError("");
-
+ 
+  //import konštanty
   try {
     // ---------- 2. Send credentials to backend API
     const res = await fetch(
       `${import.meta.env.VITE_API_URL || "http://localhost:3000/api"}/login`,
+      // `${backendURL}/login`
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

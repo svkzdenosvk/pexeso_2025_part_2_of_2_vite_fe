@@ -144,6 +144,9 @@ export type My_Type_AuthState = {
   user: My_Type_User | null;
 };
 
+// Backend 
+export type My_Type_BE = "express" | "nest";
+
 // -------------------- Login Types --------------------
 
 import type { AppDispatch } from "@pexeso/lib/redux/store/store";
