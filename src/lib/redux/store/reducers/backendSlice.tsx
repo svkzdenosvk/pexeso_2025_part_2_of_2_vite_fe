@@ -38,8 +38,9 @@ const initialState: BackendState = {
 
 export const backendUrls: Record<My_Type_BE, string> = {
   express: "https://pexeso-2025-part-1-of-2-express-be.onrender.com/api",
-  nest: "https://pexeso-2025-part-1-of-2-nest-be.vercel.app/api",
+  nest: "https://pexeso2025part1of2nestbe-production.up.railway.app/",
 };
+//https://pexeso-2025-part-1-of-2-nest-be.vercel.app/api
 
 const backendSlice = createSlice({
   name: "backend", // Slice name in Redux state
