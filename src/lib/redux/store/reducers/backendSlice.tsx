@@ -38,7 +38,7 @@ const initialState: BackendState = {
 
 export const backendUrls: Record<My_Type_BE, string> = {
   express: "https://pexeso-2025-part-1-of-2-express-be.onrender.com/api",
-  nest: "WILL BE REPLACED",
+  nest: "https://pexeso-2025-part-1-of-2-nest-be.vercel.app/api",
 };
 
 const backendSlice = createSlice({
