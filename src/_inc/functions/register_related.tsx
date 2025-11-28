@@ -106,7 +106,7 @@ export const handleRegister = async ({
         name: form.name,
         email: form.email,
         password: form.password,
-        lang,
+        // lang,
       }),
     });
 
