@@ -1,29 +1,70 @@
+/**
+ * ============================================================================
+ * LOGIN UTILITIES
+ * ============================================================================
+ *
+ * This file contains helper functions related to user login.
+ *
+ * 1. validateLogin()
+ *    - Performs client-side validation for login form fields
+ *    - Checks for:
+ *        • missing email
+ *        • invalid email format
+ *        • missing password
+ *    - Returns translation keys for UI error messages, or empty string if valid
+ *
+ * 2. handleLogin()
+ *    - Sends login credentials (email + password) to backend API (Express)
+ *    - Processes server response:
+ *        • On success → validates user shape via type guard, stores user in Redux,
+ *          and redirects to localized homepage
+ *        • On failure → maps backend error codes to translated UI messages
+ *    - Handles network errors and toggles loading spinner
+ *
+ * Goal:
+ *   - Keep async backend communication isolated from UI components
+ *   - Centralize login validation and communication logic for reusability
+ *
+ * ============================================================================
+ */
+
 import { setUser } from "@pexeso/lib/redux/store/reducers/authSlice";
 import type { My_Type_LoginParams } from "@pexeso/_inc/my_types";
 import { isLike_My_Type_User } from "@pexeso/_inc/functions/general";
 import { loginPageErrorMap } from "@pexeso/_inc/constants";
-// import {useSelector } from 'react-redux';
-// import { set_backend } from "@pexeso/lib/redux/store/reducers/backendlice";
+
+/**
+ * Validates login form fields before sending to backend.
+ *
+ * @param form - { email: string, password: string }
+ * @returns string - translation key for UI error message, or empty string if valid
+ */
+export const validateLogin = (form: {
+  email: string;
+  password: string;
+}): string => {
+  const { email, password } = form;
+
+  if (!email.trim()) return "login_page.error_alert.missing_credentials";
+
+  // simple email format check
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+    return "reg_page.error_alert.email_format";
+
+  if (!password.trim()) return "login_page.error_alert.missing_credentials";
+
+  return "";
+};
 
 /**
  * ============================================================================
  * HANDLE LOGIN FUNCTION
  * ============================================================================
  *
- * This file contains the helper function `handleLogin` for logging in users
- * using the backend API (Express + PostgreSQL) in a Vite + React environment.
- *
- * Flow:
- * 1. Sends POST request to `/api/login` with user credentials (email + password)
- * 2. Backend verifies credentials and returns user data if successful
- * 3. Handles backend error codes and maps them to translation keys for UI display
- * 4. On success:
- *    - Validates user object with type guard
- *    - Stores user in Redux
- *    - Redirects to the localized homepage
- * 5. On failure:
- *    - Sets translated error messages
- *    - Handles network or unexpected errors gracefully
+ * Helper function for processing user login.
+ * Sends credentials to the backend, handles the response (success/error),
+ * updates Redux state, redirects the user, and maps backend errors to
+ * frontend translation keys.
  *
  * @param {My_Type_LoginParams} params
  *   - `email`: user email
@@ -52,14 +93,14 @@ export const handleLogin = async ({
   // ---------- 1. Start loading state and clear previous errors
   setIsLoading(true);
   setError("");
- 
+
   //import konštanty
   try {
     // ---------- 2. Send credentials to backend API
     const res = await fetch(
       // `${import.meta.env.VITE_API_URL || "http://localhost:3000/api"}/login`,
-       `${backendUrl}/login`, {
-      
+      `${backendUrl}/login`,
+      {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -73,7 +114,7 @@ export const handleLogin = async ({
     // ---------- 4. Handle unsuccessful response
     if (!res.ok) {
       const translatedKey =
-        loginPageErrorMap[data.error] || "reg_page.error_alert.unexpected";
+        loginPageErrorMap[data.error] || "login_page.error_alert.unknown_err";
       setError(translatedKey);
       return;
     }
@@ -98,4 +139,3 @@ export const handleLogin = async ({
     setIsLoading(false);
   }
 };
-

@@ -21,6 +21,7 @@ import PublicOnlyRoute from "../PublicOnlyRoute";
 import type { My_Type_Lang } from "@pexeso/_inc/my_types";
 import { useSelector } from "react-redux";
 import { selectBackendUrl } from "@pexeso/lib/redux/store/reducers/backendSlice";
+import { validateLogin } from "@pexeso/_inc/functions/login_related";
 
 /**
  * Login Component
@@ -83,6 +84,13 @@ export const Login = () => {
 
   // Function: Handle login
   const onLogin = () => {
+    const validationError = validateLogin(form);
+
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
     handleLogin({
       email: form.email,
       password: form.password,
@@ -90,7 +98,7 @@ export const Login = () => {
       dispatch,
       setError,
       setIsLoading,
-       backendUrl,  
+      backendUrl,
       navigation: () => navigate(`/${safeLang}/`),
     });
   };
