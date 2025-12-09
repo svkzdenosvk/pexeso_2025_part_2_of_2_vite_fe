@@ -36,16 +36,20 @@ const sharedMainWrapperStyles = {
   width: "100%",
   display: "flex",
   flexDirection: "column",
+  justifyContent: "space-evenly",
 } as const;
 
 const btnsGroupsStyles = {
+  mb: 2,
   width: "100%",
   display: "flex",
   flexDirection: "row",
   justifyContent: "space-evenly",
-  
+
   "@media (max-width: 409px)": {
     flexDirection: "column",
+    justifyContent: "space-between",
+    gap:2,
   },
 };
 

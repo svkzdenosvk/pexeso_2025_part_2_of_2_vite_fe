@@ -1,4 +1,8 @@
 html {
+  height: "100%";
+  /* width: "100vw"; */
+  width: "100%";
+
   overflow-x: hidden;
 }
 
@@ -34,7 +38,7 @@ body {
   box-shadow: 0px 0px 28px 29px rgba(255, 255, 0, 0.53);
 }
 
-.disabled{
+.disabled {
   pointer-events: none;
   cursor: not-allowed;
 }

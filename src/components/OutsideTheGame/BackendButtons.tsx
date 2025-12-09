@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@pexeso/lib/redux/store/store";
 import { Button, ButtonGroup, Box, Typography } from "@mui/material";
-// import { useTranslation } from "react-i18next";
 import { set_backend } from "@pexeso/lib/redux/store/reducers/backendSlice";
 import type { My_Type_BE } from "@pexeso/_inc/my_types";
 
@@ -34,11 +33,11 @@ const BackendButtons = () => {
   return (
     <Box
       sx={{
-        mb: 2,
+        // mr: 2,
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        gap:'0.5rem',
+        gap: "0.5rem",
 
         "@media (max-width: 550px)": {
           flexDirection: "column",

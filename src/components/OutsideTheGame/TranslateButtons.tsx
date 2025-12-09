@@ -59,11 +59,11 @@ const TranslateButtons = () => {
   return (
     <Box
       sx={{
-        mb: 2,
+        // mb: 2,
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        gap:'0.5rem',
+        gap: "0.5rem",
 
         "@media (max-width: 550px)": {
           flexDirection: "column",

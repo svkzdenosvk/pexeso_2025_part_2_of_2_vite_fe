@@ -29,7 +29,6 @@ import ButtonLogReg from "@pexeso/components/LogReg/ButtonLogReg";
  */
 const sharedLangWrapperStyles = {
   p: 0,
-  m: 0,
   boxSizing: "border-box",
   width: "100%",
   display: "flex",
@@ -37,15 +36,21 @@ const sharedLangWrapperStyles = {
   justifyContent: "center",
 } as const;
 
+const logRegBtnsWrapperStyles = {
+  m: 1,
+  mb: 2,
+} as const;
+
 const SharedLangLayout = () => {
   return (
     <Box sx={sharedLangWrapperStyles}>
-      {/* Initializes language settings*/}
-      <LanguageInit />
+      <Box sx={logRegBtnsWrapperStyles}>
+        {/* Initializes language settings*/}
+        <LanguageInit />
 
-      {/* Login/Register button shown on all language-prefixed pages */}
-      <ButtonLogReg />
-
+        {/* Login/Register button shown on all language-prefixed pages */}
+        <ButtonLogReg />
+      </Box>
       {/* Nested routes will be rendered here */}
       <Outlet />
     </Box>
