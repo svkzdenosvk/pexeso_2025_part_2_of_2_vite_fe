@@ -34,7 +34,7 @@ components/            # UI components
   ├── OutsideTheGame/  # layouts & pages outside gameplay
   ├── RelatedToGame/   # core game components
   └── StylingComp/     # themes & shared styles
-lib/                   # firebase, i18n, redux
+lib/                   # i18n, redux
 _inc/                  # types, hooks, helper functions
 ```
 
@@ -71,8 +71,16 @@ Enjoy the game! 🎮
 - 🌍 **react-i18next**
 
 ### State & Data
-- 🗃️ **Redux Toolkit**
-- 🔥 **Firebase (Auth + Firestore)**
+
+**Frontend State:**
+
+- 🗃️ **Redux Toolkit** - Client-side state management
+
+**Backend & Database:**
+
+- 🔐 **Supabase Auth** - User authentication and session management
+- 🗄️ **Prisma ORM** - Type-safe database client
+- 🐘 **PostgreSQL** - Database (hosted on Supabase)
 
 ---
 
